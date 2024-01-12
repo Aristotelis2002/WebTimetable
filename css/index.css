@@ -1,0 +1,268 @@
+@charset "utf-8";
+@font-face {
+    font-family: 'ZARZAF'; 
+    src: url("../fonts/AudiType-ExtendedNormal.ttf");
+}
+
+html {
+  overflow:   hidden;
+}
+
+::-webkit-scrollbar {
+    width: 0.5vh;
+    background-color: transparent; 
+	
+}
+
+::-webkit-scrollbar-thumb {
+background-image: linear-gradient(#56d1f8, #f87c56);
+}
+
+body {
+	background-color: #333333;
+	margin: 0 auto;
+	height: 100%;
+	width: 100%;
+}
+
+header {
+	background-color: #333;
+	margin: 0 auto;
+	font-family: 'ZARZAF',  sans-serif;
+	margin-bottom: 3vh;
+}
+
+main {
+	width: 100%;
+	height: 100%;
+	margin: 0 auto;
+	background-color: #EEEEEE;
+	font-family: 'ZARZAF', sans-serif;
+}
+
+footer {
+	background-color: #EEEEEE;
+	width: 100%;
+    bottom: 0px;
+	left: 50%;
+	right: 50%;
+	margin: 0 auto;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0 auto;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 2px 27px;
+    text-decoration: none;
+}
+
+.active {
+    background-color: #4CAF50;
+}
+
+/*Navi menu on top*/
+nav.top {
+	width: 70%;
+	height: 2%;
+	float: left;
+}
+
+video.home {
+	width: 5vh;
+	height: 5vh;
+	transition-duration: 0.5s;
+	padding-left: 3%;
+	padding-top: 1%;
+}
+
+video.home:hover {
+	width: 5.5vh;
+	height: 5.5vh;
+	padding-left: auto;
+}
+
+#form-button {
+	border: none;
+	width: auto;
+	height: 7vh;
+	background-color: #333;
+	float: right;
+}
+
+img.reg {
+	width: 25vh;
+	height: 5.5vh;
+	transition-duration: 0.5s;
+}
+
+img.reg:hover {
+	width: 25.5vh;
+	height: 5.7vh;
+}
+
+/*S.th. else*/
+ul.bottom {
+	width: 100%;
+	display: table;
+	padding-bottom: 0.5vh;
+}
+
+li.bottom {
+	height: 3.2vh;
+	width: 25%;
+	font-size: 2.1vh;
+	transition-duration: 0.5s;
+	display: table-cell;
+}
+
+li.bottom:hover {
+	background-color: #aaa;
+}
+
+h1 {
+	text-align: center;
+	color: #22222F;
+}
+
+p {
+	margin: 8px;
+	font-size: 22px;
+	text-align: justify;
+}
+
+h2 {
+	text-align: center;
+	color: #22222F;
+}
+
+.container {
+	width: 100%;
+	perspective: 1px;
+  	transform-style: preserve-3d;
+  	height: 100vh;
+  	overflow-x: hidden;
+  	overflow-y: scroll;
+	margin: 0 auto;
+}
+
+.top_container {
+  width: 100%;
+  
+  margin: 0 auto;
+}
+
+.bottom_container{
+	 display: block;
+  position: relative;
+  width: 100%;
+  background-color: white;
+  z-index: 1;
+  margin: 0 auto;
+}
+
+.top_text{
+	background-color: #EEEEEE;
+	text-align: justify;
+}
+
+
+
+/*NEW*/
+
+.open-button {
+  background-color: transparent;
+  color: white;
+  right:10px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed; 
+}
+
+/* LogIn/Registration form */
+
+#signInForm {
+  width: 30%
+  height: 50%;
+  padding: 10px;
+  background-color: white;
+  display: none;
+  position: fixed;
+  top: 30.2vh;
+  left: 35%;
+  right: 35%;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+}
+
+#signInForm label {
+	width: 90%;
+	margin-left: 5%;
+    margin-right: 5%;
+	margin-bottom: 0.5vh;
+	font-size: 2vh;
+}
+
+/* Full-width input fields */
+#signInForm input[type=text], #signInForm input[type=password] {
+  width: 90%;
+  height: 4vh;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-bottom: 2vh;
+  border: none;
+  background: #f1f1f1;
+  font-size: 2vh;
+}
+
+/* When the inputs get focus, do something */
+#signInForm input[type=text]:focus, #signInForm input[type=password]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+#signInForm button {
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  height: 4vh;
+  margin-bottom: 1vh;
+  opacity: 0.8;
+  font-size: 2vh;
+}
+
+/* Set a style for the submit/login button */
+#signInForm #btn-submit {
+  background-image: linear-gradient(#85fadb, #09ce99);
+}
+
+/* Add a green background color to the register button */
+#signInForm #btn-register {
+   background-image: linear-gradient(#5ad6fc, #0abaf0);
+}
+
+/* Add a red background color to the cancel button */
+#signInForm #btn-cancel {
+   background-image: linear-gradient(#f98967, #f5450f);
+}
+
+/* Add some hover effects to buttons */
+#signInForm #btn-submit:hover, #btn-register:hover, #btn-cancel:hover {
+  opacity: 1;
+}
