@@ -8,70 +8,116 @@
   <title>Разписание за реферати</title>
 </head>
 <body>
-	<div class="container">
-		<div class="top_container">
-		<header>
-			<nav class="top">
-				<a href="index.html"><video class="home" autoplay muted>
-					<source type="video/mp4" src="images/home_button.mp4" ></video></a>
-			</nav>
-			
-			<button id="form-button"><img src="images/reg.png" class="reg" alt=""></button>
-			
-			<form id="signInForm">
-				<h1>Вход</h1>
-			
-				<label for="email"><b>И-мейл</b></label>
-				<input type="text" placeholder="Enter Email" name="email" required>
-			
-				<label for="psw"><b>Парола</b></label>
-				<input type="password" placeholder="Enter Password" name="psw" required>
-			
-				<button type="submit" id="btn-submit">Вход</button>
-				<button type="button" id="btn-register" onclick="closeForm()">Регистрирай се</button>
-				<button type="button" id="btn-cancel" onclick="closeForm()">Затвори</button>
-			</form>
-			
-			<!-- Still not ready
-			<form action="/action_page.php" id="registrationForm">
-				<h1>Вход</h1>
-			
-				<label for="email"><b>И-мейл</b></label>
-				<input type="text" placeholder="Enter Email" name="email" required>
-			
-				<label for="psw"><b>Парола</b></label>
-				<input type="password" placeholder="Enter Password" name="psw" required>
-			
-				<button type="submit" id="btn-submit">Вход</button>
-				<button type="button" id="btn-register" onclick="closeForm()">Регистрирай се</button>
-				<button type="button" id="btn-cancel" onclick="closeForm()">Затвори</button>
-			</form>-->
-			
-			<video class="logo" width="100%" autoplay muted>
-				<source type="video/mp4" src="images/title.mp4" >
-			</video>
-			
-			<!-- Евентуално ако трябва някакво меню
-			<nav>
-			<ul class="bottom">
-				<li class="bottom"><a href="#">Контакти</a></li>
-				<li class="bottom"><a href="#">Форум</a></li>
-				<li class="bottom"><a href="#">Генериране на разписание</a></li>
-				<li class="bottom"><a href="#">Преглед на общо разписнание</a></li>
-			</ul>
-			</nav>-->
-			
-		</header>
-		</div>
+	<header>
+		<nav class="top">
+			<a href="index.html"><video class="home" autoplay muted>
+				<source type="video/mp4" src="images/home_button.mp4" ></video></a>
+		</nav>
 		
-<main>
+		<button id="form-button"><img src="images/reg.png" class="reg" alt=""></button>
+		
+		<form method="post" id="signInForm">
+			<h1>Вход</h1>
+		
+			<label for="email"><b>И-мейл</b></label>
+			<input type="text" placeholder="Enter Email" name="email" required>
+		
+			<label for="psw"><b>Парола</b></label>
+			<input type="password" placeholder="Enter Password" name="psw" required>
+		
+			<button type="submit" id="btn-submit">Вход</button>
+			<button type="button" id="btn-register" onclick="closeForm()">Регистрирай се</button>
+			<button type="button" id="btn-cancel-signIn" onclick="closeForm()">Затвори</button>
+		</form>
+		
+		<form method="post" id="registrationForm">
+			<h1>Регистрация</h1>
+		
+			<label for="username"><b>Потребителско име</b></label>
+			<input type="text" placeholder="Enter Username" name="username" required>
 	
-</main>
+			<label for="facultyNumber"><b>Факлутетен номер</b></label>
+			<input type="text" placeholder="Enter faculty number" name="facultyNumber" required>
+		
+			<label for="psw"><b>Парола</b></label>
+			<input type="password" placeholder="Enter Password" name="psw" required>
+		
+			<button type="submit" id="btn-submit">Регистрирай се</button>
+			<button type="button" id="btn-cancel-reg" onclick="closeForm()">Затвори</button>
+		</form>
+		
+		<video class="title" id="title-video" autoplay muted>
+			<source type="video/mp4" src="images/title.mp4">
+		</video>
+		<img class="title" id="title-image" src="images/title.png" alt="">
+		
+		<!-- Евентуално ако трябва някакво меню
+		<nav>
+		<ul class="bottom">
+			<li class="bottom"><a href="#">Контакти</a></li>
+			<li class="bottom"><a href="#">Форум</a></li>
+			<li class="bottom"><a href="#">Генериране на разписание</a></li>
+			<li class="bottom"><a href="#">Преглед на общо разписнание</a></li>
+		</ul>
+		</nav>-->
+		
+	</header>	
+	
+	<main>
+	<table>
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>Час</th>
+          <th>Фн</th>
+		  <th>Група</th>
+          <th>Име Фамилия</th>
+          <th>Тема - номер</th>
+		  <th>Тема</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>John Doe</td>
+          <td>25</td>
+          <td>john.doe@example.com</td>
+        </tr>
+        <tr>
+          <td>Jane Smith</td>
+          <td>30</td>
+          <td>jane.smith@example.com</td>
+        </tr>
+        <!-- Add more rows as needed -->
+      </tbody>
+    </table>
+	<table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>John Doe</td>
+          <td>25</td>
+          <td>john.doe@example.com</td>
+        </tr>
+        <tr>
+          <td>Jane Smith</td>
+          <td>30</td>
+          <td>jane.smith@example.com</td>
+        </tr>
+        <!-- Add more rows as needed -->
+      </tbody>
+    </table>
+	</main>
 	
 	<footer>
-		<h1><!--ZARZAF--></h1>
+		<h1>Разписание за реферати</h1>
 	</footer>
 			
-	</div>
+	
 </body>
 </html>
