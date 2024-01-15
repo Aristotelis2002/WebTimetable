@@ -1,7 +1,7 @@
 @charset "utf-8";
 
 html {
-  overflow: hidden;
+  
 }
 
 ::-webkit-scrollbar {
@@ -16,7 +16,6 @@ html {
 body {
 	background-color: #333;
 	margin: 0 auto;
-	height: 100%;
 	width: 100%;
 	font-family: 'Corbel Light', sans-serif;
 }
@@ -24,14 +23,11 @@ body {
 header {
 	background-color: #333;
 	margin: 0 auto;
-	margin-bottom: 3vh;
 }
 
 main {
 	width: 100%;
-	height: 100%;
 	margin: 0 auto;
-	display: flex;
 	background-color: #f5fdff;
 }
 
@@ -69,8 +65,12 @@ li a {
 }
 
 /*Navi menu on top*/
+section.top {
+	display:flex;
+}
+
 nav.top {
-	width: 70%;
+	width: 15%;
 	height: 2%;
 	float: left;
 }
@@ -83,18 +83,32 @@ video.home {
 	padding-top: 1%;
 }
 
+#usernameTitle {
+	width: 70%;
+	font-size: 4vh;
+	text-align: center;
+	transition-duration: 0.5s;
+	padding-top: 1vh;
+	margin: 0 auto;
+	color: #eee;
+}
+
 video.home:hover {
 	width: 5.5vh;
 	height: 5.5vh;
 	padding-left: auto;
 }
 
-#form-button {
+button.top {
 	border: none;
-	width: auto;
+	width: 15%;
 	height: 7vh;
 	background-color: #333;
 	float: right;
+}
+
+#logOut-button {
+	display: none;
 }
 
 img.reg {
@@ -119,23 +133,55 @@ img.reg:hover {
 	display: none;
 }
 
-/*S.th. else*/
+/*Menu*/
+
 ul.bottom {
 	width: 100%;
 	display: table;
 	padding-bottom: 0.5vh;
+	padding-top: 1vh;
 }
 
 li.bottom {
-	height: 3.2vh;
-	width: 25%;
-	font-size: 2.1vh;
+	height: 3.8vh;
+	width: 50%;
+	font-size: 2.5vh;
 	transition-duration: 0.5s;
 	display: table-cell;
+	color: #eee;
 }
 
-li.bottom:hover {
-	background-color: #aaa;
+
+.dropdown {
+	width: 70%;
+	height: 100%;
+	border-color: #444;
+	background-color: #444;
+	/*background-image: linear-gradient(-90deg, #A9A5A5, #E0896E);*/
+	float: right;
+	font-size: 2.2vh;
+	color: #eee;
+	transition-duration: 0.5s;
+}
+
+.dropdown:hover {
+	border: none;
+	background-image: linear-gradient(-90deg, #59d0f5, #90b3be);
+}
+
+.menu {
+	border:none;
+	background-color: #333;
+	width: 100%;
+	height: 100%;
+	color: #eee;
+	font-size: 2.2vh;
+	transition-duration: 0.5s;
+}
+
+.menu:hover {
+	background-color: #A9A5A5;
+	color: #000;
 }
 
 h1 {
@@ -187,7 +233,7 @@ h2 {
 /*Table*/
 
 table {
-  width: 50%;
+  width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
   
@@ -200,8 +246,15 @@ th, td {
 }
 
 th {
-  background-image: linear-gradient(#56d1f8, #f87c56);
+  background-image: linear-gradient(#56d1f8, #ccc);
   color: #fff;
+}
+
+.tableDropList {
+	width: 100%;
+	border: none;
+	height: 100%;
+	background-color: #ccc;
 }
 
 /*outdated?*/
@@ -271,7 +324,7 @@ form button {
 }
 
 /* Set a style for the submit/login button */
-form #btn-submit {
+form #btn-submit, #btn-register {
   background-image: linear-gradient(#85fadb, #09ce99);
 }
 

@@ -4,26 +4,35 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/index.css">
+  <script src="js/tableManager.js"></script>
   <script src="js/form.js"></script>
+  <script src="js/userManager.js"></script>
+  
   <title>Разписание за реферати</title>
 </head>
 <body>
 	<header>
-		<nav class="top">
-			<a href="index.html"><video class="home" autoplay muted>
-				<source type="video/mp4" src="images/home_button.mp4" ></video></a>
-		</nav>
+		<section class="top">
+			<nav class="top">
+				<a href="index.html"><video class="home" autoplay muted>
+					<source type="video/mp4" src="images/home_button.mp4" ></video></a>
+			</nav>
+			
+			<p id="usernameTitle"></p>
+			
+			<button class="top" id="form-button"><img src="images/reg.png" class="reg" alt=""></button>
+			<button class="top" id="logOut-button"><img src="images/logOut.png" class="reg" alt=""></button>
+		</section>
 		
-		<button id="form-button"><img src="images/reg.png" class="reg" alt=""></button>
-		
-		<form method="post" id="signInForm">
+		<form method="post" id="logInForm">
 			<h1>Вход</h1>
 		
-			<label for="email"><b>И-мейл</b></label>
-			<input type="text" placeholder="Enter Email" name="email" required>
+			<label for="username"><b>Потребителско име</b></label>
+			<input type="text" placeholder="Enter username" name="username" required pattern=".{3,29}" title="Must be between 3 and 29 characters">
 		
 			<label for="psw"><b>Парола</b></label>
-			<input type="password" placeholder="Enter Password" name="psw" required>
+			<input type="password" placeholder="Enter Password" name="psw" required  pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,16}"
+           title="Must contain at least one lowercase letter, one uppercase letter, and one digit. Length must be between 6 and 16 characters.">
 		
 			<button type="submit" id="btn-submit">Вход</button>
 			<button type="button" id="btn-register" onclick="closeForm()">Регистрирай се</button>
@@ -34,15 +43,16 @@
 			<h1>Регистрация</h1>
 		
 			<label for="username"><b>Потребителско име</b></label>
-			<input type="text" placeholder="Enter Username" name="username" required>
+			<input type="text" placeholder="Enter username" name="username" required pattern=".{3,29}" title="Must be between 3 and 29 characters">
 	
 			<label for="facultyNumber"><b>Факлутетен номер</b></label>
-			<input type="text" placeholder="Enter faculty number" name="facultyNumber" required>
+			<input type="text" placeholder="Enter faculty number" name="facultyNumber" required pattern=".{5,15}" title="Must be between 5 and 15 characters">
 		
 			<label for="psw"><b>Парола</b></label>
-			<input type="password" placeholder="Enter Password" name="psw" required>
+			<input type="password" placeholder="Enter Password" name="psw" required  pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,16}"
+           title="Must contain at least one lowercase letter, one uppercase letter, and one digit. Length must be between 6 and 16 characters.">>
 		
-			<button type="submit" id="btn-submit">Регистрирай се</button>
+			<button type="submit" id="btn-register">Регистрирай се</button>
 			<button type="button" id="btn-cancel-reg" onclick="closeForm()">Затвори</button>
 		</form>
 		
@@ -50,20 +60,23 @@
 			<source type="video/mp4" src="images/title.mp4">
 		</video>
 		<img class="title" id="title-image" src="images/title.png" alt="">
-		
-		<!-- Евентуално ако трябва някакво меню
-		<nav>
-		<ul class="bottom">
-			<li class="bottom"><a href="#">Контакти</a></li>
-			<li class="bottom"><a href="#">Форум</a></li>
-			<li class="bottom"><a href="#">Генериране на разписание</a></li>
-			<li class="bottom"><a href="#">Преглед на общо разписнание</a></li>
-		</ul>
-		</nav>-->
+				
+		<nav id='contentMenu'>
+			<ul class="bottom">
+				<li class="bottom"><button type="button" class='menu' id='scheduleButton'>Генериране на разписание</button></li>
+				<li class="bottom">
+					<label for="dropdown">Изберете график</label>
+					<select class="dropdown" id='tableSelect'>
+						<option value="all">Всички</option>
+					</select>
+				</li>
+			</ul>
+		</nav>
 		
 	</header>	
 	
 	<main>
+	<section id='tables'>
 	<table>
       <thead>
         <tr>
@@ -74,6 +87,7 @@
           <th>Име Фамилия</th>
           <th>Тема - номер</th>
 		  <th>Тема</th>
+		  <th>Интерес</th>
         </tr>
       </thead>
       <tbody>
@@ -86,6 +100,11 @@
           <td>Jane Smith</td>
           <td>30</td>
           <td>jane.smith@example.com</td>
+		  <td>6</td>
+		  <td>jane.smith@example.com</td>
+		  <td>jane.smith@example.com</td>
+		  <td>jane.smith@example.com</td>
+		  <td><img src="images/reg.png" class="reg" alt=""></td>
         </tr>
         <!-- Add more rows as needed -->
       </tbody>
@@ -112,6 +131,7 @@
         <!-- Add more rows as needed -->
       </tbody>
     </table>
+	</section>
 	</main>
 	
 	<footer>
