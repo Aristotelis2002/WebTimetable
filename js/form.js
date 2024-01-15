@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 	
 	function logInForm() {		
-		//...
+		//..
 	}
 	
 	function register() {
