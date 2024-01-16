@@ -166,6 +166,11 @@ document.addEventListener('DOMContentLoaded', function() {
 		for (var i = 0; i < 5 ; i++) {
 			addRow('2');
 		}
+
+		if(sessionStorage.getItem('username') == null) {
+			sessionStorage.setItem('username', '');
+		}
+
 		updateView();
 	}
 	
