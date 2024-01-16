@@ -42,13 +42,13 @@
 			<h1>Регистрация</h1>
 		
 			<label for="username"><b>Потребителско име</b></label>
-			<input type="text" placeholder="Enter username" name="username" required pattern=".{3,29}" title="Must be between 3 and 29 characters">
+			<input type="text" id="usernameReg" placeholder="Enter username" name="username" required pattern=".{3,29}" title="Must be between 3 and 29 characters">
 	
 			<label for="facultyNumber"><b>Факлутетен номер</b></label>
-			<input type="text" placeholder="Enter faculty number" name="facultyNumber" required pattern=".{5,15}" title="Must be between 5 and 15 characters">
+			<input type="text" id="fn" placeholder="Enter faculty number" name="facultyNumber" required pattern=".{5,15}" title="Must be between 5 and 15 characters">
 		
 			<label for="psw"><b>Парола</b></label>
-			<input type="password" placeholder="Enter Password" name="psw" required  pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,16}"
+			<input type="password" id="passwordReg" placeholder="Enter Password" name="psw" required  pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,16}"
            title="Must contain at least one lowercase letter, one uppercase letter, and one digit. Length must be between 6 and 16 characters.">
 		
 			<button type="submit" id="btn-register">Регистрирай се</button>
@@ -76,60 +76,7 @@
 	
 	<main>
 	<section id='tables'>
-	<table>
-      <thead>
-        <tr>
-          <th>id</th>
-          <th>Час</th>
-          <th>Фн</th>
-		  <th>Група</th>
-          <th>Име Фамилия</th>
-          <th>Тема - номер</th>
-		  <th>Тема</th>
-		  <th>Интерес</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>John Doe</td>
-          <td>25</td>
-          <td>john.doe@example.com</td>
-        </tr>
-        <tr>
-          <td>Jane Smith</td>
-          <td>30</td>
-          <td>jane.smith@example.com</td>
-		  <td>6</td>
-		  <td>jane.smith@example.com</td>
-		  <td>jane.smith@example.com</td>
-		  <td>jane.smith@example.com</td>
-		  <td><img src="images/reg.png" class="reg" alt=""></td>
-        </tr>
-        <!-- Add more rows as needed -->
-      </tbody>
-    </table>
-	<table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Age</th>
-          <th>Email</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>John Doe</td>
-          <td>25</td>
-          <td>john.doe@example.com</td>
-        </tr>
-        <tr>
-          <td>Jane Smith</td>
-          <td>30</td>
-          <td>jane.smith@example.com</td>
-        </tr>
-        <!-- Add more rows as needed -->
-      </tbody>
-    </table>
+
 	</section>
 	</main>
 	

@@ -7,9 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	const formRegisterButton = document.getElementById('btn-register');
 
 	function openlogInForm() {
-		document.getElementById("title-video").style.display = "none";
-		document.getElementById("title-image").style.display = "block";
 		document.getElementById("logInForm").style.display = "block";
+		document.getElementById("logInForm").reset();
 	}
 
 	function openRegistrationForm() {
@@ -43,7 +42,11 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	if (formSubmitButton) {
-		formSubmitButton.addEventListener('click', logInForm)
+		formSubmitButton.addEventListener('click', logInForm);
+	}
+
+	if (formRegisterButton) {
+		formRegisterButton.addEventListener('click', register);
 	}
 
 	function logInForm() {
@@ -57,7 +60,14 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	function register() {
-		//...
+		var username = document.getElementById("usernameReg").value;
+		var fn = document.getElementById("fn").value;
+		var password = document.getElementById("passwordReg").value;
+		sha256Hash(password).then(hashedPass => {
+			registerUser(username, fn, hashedPass);
+		}).catch(error => {
+			console.error('Error with sha256:', error);
+		});
 	}
 
 	async function loginUser(username, password) {
@@ -67,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
-				body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
+				body: `action=${encodeURIComponent('login')}&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
 			});
 
 			if (!response.ok) {
@@ -78,11 +88,12 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (data.error == null) {
 				// Login successful
 				sessionStorage.setItem('username', username);
-				if(data.adminStatus.admin == 0) {
+				if (data.adminStatus.admin == 0) {
 					sessionStorage.setItem('adminStatus', false);
 				} else {
 					sessionStorage.setItem('adminStatus', true);
 				}
+				closeSignInForm();
 				updateView();
 			} else {
 				// Login failed
@@ -95,7 +106,34 @@ document.addEventListener('DOMContentLoaded', function () {
 			console.error('Fetch error:', error.message);
 		}
 	}
+	async function registerUser(username, fn, password) {
+		try {
+			const response = await fetch('http://localhost/demo/api.php', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: `action=${encodeURIComponent('register')}&username=${encodeURIComponent(username)}&fn=${encodeURIComponent(fn)}&password=${encodeURIComponent(password)}`,
+			});
 
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+
+			const data = await response.json(); //json data has an error, message, adminStatus
+			if (data.error == null) {
+				
+			} else {
+				// Login failed
+				console.log("The error message is " + data.error);
+				// TODO
+				// We should implement some logic for the frontend here
+			}
+
+		} catch (error) {
+			console.error('Fetch error:', error.message);
+		}
+	}
 	function sha256Hash(input) {
 		const encoder = new TextEncoder();
 		const data = encoder.encode(input);

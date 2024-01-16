@@ -1,8 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-	// sessionStorage.setItem('username', 'user');
-	sessionStorage.setItem('username', '');
-	sessionStorage.setItem('adminStatus', false);
-	
 	const logOutButton = document.getElementById("logOut-button");
 	
 	function updateView() {
@@ -19,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			if (sessionStorage.getItem('adminStatus') === 'true') {
 				document.getElementById("usernameTitle").style.color = '#f9d87b';
 				document.getElementById("scheduleButton").textContent = "Качване на разписание";
+				toggleLastColumnVisibility(true);
 			}
 		} else {
 			document.getElementById("logOut-button").style.display = "none";
@@ -34,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	function logOut() {
 		sessionStorage.setItem('username', '');
 		sessionStorage.setItem('adminStatus', false);
+		
 		updateView();
 	}
 	

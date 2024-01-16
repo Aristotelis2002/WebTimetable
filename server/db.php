@@ -99,6 +99,13 @@ function getAdminStatus($username) {
     }
 }
 
+function addUserToDB($username, $fn, $password){
+	$db = new Db('users'); 
+	$username = $db->escapeString($username);
+	$password = $db->escapeString($password);
+	$sql = "INSERT INTO `users` (`userId`, `fn`, `username`, `password`, `admin`) VALUES (NULL, '', '', '', '')";
+}
+
 // Example usage:
 /*
 $userData = getUser("1");

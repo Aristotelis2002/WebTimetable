@@ -9,15 +9,33 @@ $response = null;
 // Check if it's a POST request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Retrieve the POST data
-    $username = isset($_POST['username']) ? $_POST['username'] : null;
-    $password = isset($_POST['password']) ? $_POST['password'] : null;
+	$action = isset($_POST['action']) ? $_POST['action'] : null;
+	switch ($action) {
+		case 'login':
+            $username = isset($_POST['username']) ? $_POST['username'] : null;
+			$password = isset($_POST['password']) ? $_POST['password'] : null;
 
-    if ($username !== null && $password !== null) {
-        $response = login($username, $password);
-    } else {
-        // If either username or password is missing
-        $response = array('error' => 'Both username and password are required.');
-    }
+			if ($username !== null && $password !== null) {
+				$response = login($username, $password);
+			} else {
+				// If either username or password is missing
+				$response = array('error' => 'Both username and password are required.');
+			}
+            break;
+
+        case 'register':
+            $username = isset($_POST['username']) ? $_POST['username'] : null;
+            $fn = isset($_POST['fn']) ? $_POST['fn'] : null;
+			$password = isset($_POST['password']) ? $_POST['password'] : null;
+            $response = register($username, $fn, $password);
+            break;
+
+        default:
+            // If the provided action is not recognized
+            $response = array('error' => 'Invalid action. Fail at js fetch to api.php');
+            break;
+	}
+    
 } /* else {
     $response = array('error' => 'Invalid request method.');  //not needed probably
 } */
@@ -37,6 +55,13 @@ function login($username, $password) {
 		return array('error' => 'Admin status is null');
 	}
     return array('message' => 'Login successful for ' . $username, 'adminStatus' => $adminStatus);
+}
+
+function register($username, $fn, $password) {
+	if(doesUserExist($username)) {
+		return array('error' => 'Username is already used.');
+	}
+	return null;
 }
 
 // header('Content-Type: application/json');
