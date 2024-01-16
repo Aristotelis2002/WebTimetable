@@ -102,17 +102,10 @@ function getAdminStatus($username) {
 function addUserToDB($username, $fn, $password){
 	$db = new Db('users'); 
 	$username = $db->escapeString($username);
+	$fn = $db->escapeString($fn);
 	$password = $db->escapeString($password);
-	$sql = "INSERT INTO `users` (`userId`, `fn`, `username`, `password`, `admin`) VALUES (NULL, '', '', '', '')";
+	$sql = "INSERT INTO `users` (`userId`, `fn`, `username`, `password`, `admin`) VALUES (NULL, '$fn', '$username', '$password', '0')";
+	$result = $db->query($sql);
+	return  $result->fetch(PDO::FETCH_ASSOC); // maybe error causing
 }
-
-// Example usage:
-/*
-$userData = getUser("1");
-
-if ($userData !== null) {
-    print_r($userData);
-} else {
-    echo "User not found.";
-}*/
 ?>

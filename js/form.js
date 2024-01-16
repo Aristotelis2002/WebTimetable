@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
 	const formButton = document.getElementById('form-button');
-	const formRegistrationButton = document.getElementById('btn-register');
+	const formRegistrationButton = document.getElementById('btn-register-reroute');
 	const formCloseButtonSignIn = document.getElementById('btn-cancel-signIn');
 	const formCloseButtonReg = document.getElementById('btn-cancel-reg');
 	const formSubmitButton = document.getElementById('btn-submit');
@@ -122,7 +122,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 			const data = await response.json(); //json data has an error, message, adminStatus
 			if (data.error == null) {
-				
+				// Registration succesfull
+				console.log(data);
+				// Functionality after registration
 			} else {
 				// Login failed
 				console.log("The error message is " + data.error);

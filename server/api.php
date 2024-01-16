@@ -61,7 +61,8 @@ function register($username, $fn, $password) {
 	if(doesUserExist($username)) {
 		return array('error' => 'Username is already used.');
 	}
-	return null;
+	$output = addUserToDB($username, $fn, $password);
+	return array('message' => 'Registration successful for ' . $username, 'DBresponse' => $output);
 }
 
 // header('Content-Type: application/json');
