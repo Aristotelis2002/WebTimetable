@@ -9,31 +9,31 @@ document.addEventListener('DOMContentLoaded', function() {
 		// TODO RENAME ALL
         const headerRow = document.createElement("tr");
 		
-        const headerCell1 = document.createElement("th");
-        headerCell1.textContent = 'id';
-		const headerCell2 = document.createElement("th");
-        headerCell2.textContent = 'Час';
-		const headerCell3 = document.createElement("th");
-        headerCell3.textContent = 'фн';
-		const headerCell4 = document.createElement("th");
-        headerCell4.textContent = 'Група';
-		const headerCell5 = document.createElement("th");
-        headerCell5.textContent = 'Име Фамилия';
-		const headerCell6 = document.createElement("th");
-        headerCell6.textContent = 'Номер на тема';
-		const headerCell7 = document.createElement("th");
-        headerCell7.textContent = 'Тема';
-		const headerCell8 = document.createElement("th");
-        headerCell8.textContent = 'Интерес';
+        const id = document.createElement("th");
+        id.textContent = 'id';
+		const time = document.createElement("th");
+        time.textContent = 'Час';
+		const fn = document.createElement("th");
+        fn.textContent = 'фн';
+		const group = document.createElement("th");
+        group.textContent = 'Група';
+		const name = document.createElement("th");
+        name.textContent = 'Име Фамилия';
+		const themeNumber = document.createElement("th");
+        themeNumber.textContent = 'Номер на тема';
+		const theme = document.createElement("th");
+        theme.textContent = 'Тема';
+		const interest = document.createElement("th");
+        interest.textContent = 'Интерес';
 
-        headerRow.appendChild(headerCell1);
-		headerRow.appendChild(headerCell2);
-		headerRow.appendChild(headerCell3);
-		headerRow.appendChild(headerCell4);
-		headerRow.appendChild(headerCell5);
-		headerRow.appendChild(headerCell6);
-		headerRow.appendChild(headerCell7);
-		headerRow.appendChild(headerCell8);
+        headerRow.appendChild(id);
+		headerRow.appendChild(time);
+		headerRow.appendChild(fn);
+		headerRow.appendChild(group);
+		headerRow.appendChild(name);
+		headerRow.appendChild(themeNumber);
+		headerRow.appendChild(theme);
+		headerRow.appendChild(interest);
 		
 		table.appendChild(headerRow);
 	
@@ -51,51 +51,63 @@ document.addEventListener('DOMContentLoaded', function() {
 		// Ще се променят имената и параметрите на функцията според това какво е удобно за подаване
 		const newRow = document.createElement("tr");
 		
-		const cell1 = document.createElement("td");
-		cell1.textContent = "New Cell 1";
+		const id = document.createElement("td");
+		id.textContent = "New Cell 1";
 		
-		const cell2 = document.createElement("td");
-		cell2.textContent = "New Cell 2";
+		const time = document.createElement("td");
+		time.textContent = "New Cell 2";
 		
-		const cell3 = document.createElement("td");
-		cell3.textContent = "New Cell 3";
+		const fn = document.createElement("td");
+		fn.textContent = "New Cell 3";
 		
-		const cell4 = document.createElement("td");
-		cell4.textContent = "New Cell 4";
+		const group = document.createElement("td");
+		group.textContent = "New Cell 4";
 		
-		const cell5 = document.createElement("td");
-		cell5.textContent = "New Cell 1";
+		const name = document.createElement("td");
+		name.textContent = "New Cell 1";
 		
-		const cell6 = document.createElement("td");
-		cell6.textContent = "New Cell 2";
+		const themeNumber = document.createElement("td");
+		themeNumber.textContent = "New Cell 2";
 		
-		const cell7 = document.createElement("td");
-		cell7.textContent = "New Cell 1";
+		const theme = document.createElement("td");
+		theme.textContent = "New Cell 1";
 		
-		const cell8 = document.createElement("td");
+		const interest = document.createElement("td");
 		const dropdown = document.createElement("select");
 		dropdown.classList.add("tableDropList");
 	
-		// Add three options to the dropdown
-		for (let i = 1; i <= 3; i++) {
-			const option = document.createElement("option");
-			option.value = 1;
-			option.text = 'opcii';
-			dropdown.appendChild(option);
-		}
+		const nothing = document.createElement("option");
+		nothing.value = 0;
+		nothing.text = '';
+		dropdown.appendChild(nothing);
+		const must = document.createElement("option");
+		must.value = 1;
+		must.text = 'Трябва да отида';
+		dropdown.appendChild(must);
+		const think = document.createElement("option");
+		think.value = 2;
+		think.text = 'Мисля да отида';
+		dropdown.appendChild(think);
+		const interesting = document.createElement("option");
+		interesting.value = 3;
+		interesting.text = 'Интересно ми е';
+		dropdown.appendChild(interesting);
+		const might = document.createElement("option");
+		might.value = 4;
+		might.text = 'Може да е интересно';
+		dropdown.appendChild(might);
 	
-		// Append the dropdown to cell2
-		cell8.appendChild(dropdown);
+		interest.appendChild(dropdown);
 		
 		// Append cells to the new row
-		newRow.appendChild(cell1);
-		newRow.appendChild(cell2);
-		newRow.appendChild(cell3);
-		newRow.appendChild(cell4);
-		newRow.appendChild(cell5);
-		newRow.appendChild(cell6);
-		newRow.appendChild(cell7);
-		newRow.appendChild(cell8);
+		newRow.appendChild(id);
+		newRow.appendChild(time);
+		newRow.appendChild(fn);
+		newRow.appendChild(group);
+		newRow.appendChild(name);
+		newRow.appendChild(themeNumber);
+		newRow.appendChild(theme);
+		newRow.appendChild(interest);
 		
 		// Append the new row to the table
 		table.appendChild(newRow);
@@ -140,9 +152,34 @@ document.addEventListener('DOMContentLoaded', function() {
 			//DO SOMETHING SWITCH ON VALUE
 	    }
 	}
+	
+	function clearDropdownValues() {
+	for(let i = 0; i < tables.length; i++) {
+		const table = document.getElementById(tables[i]);
+	
+		if (!table) {
+			console.error(`Table with ID ${tableID} not found.`);
+			return;
+		}
+		
+		// Iterate through rows in the table
+		for (let i = 1; i < table.rows.length; i++) {
+				const row = table.rows[i];
+				// Get the second cell (index 1) which contains the dropdown
+				const dropdownCell = row.cells[7];
+			
+				// Check if the cell contains a dropdown with the specified class
+				const dropdown = dropdownCell.querySelector('.tableDropList');
+				// Retrieve the selected value of the dropdown
+				dropdown.value = 0;
+			}
+	}
+	
+	}
 
 	window.tables = tables;
 	window.createTable = createTable;
 	window.addRow = addRow;
 	window.removeTable = removeTable;
+	window.clearDropdownValues = clearDropdownValues;
 });

@@ -49,7 +49,9 @@ document.addEventListener('DOMContentLoaded', function () {
 		formRegisterButton.addEventListener('click', register);
 	}
 
-	function logInForm() {
+	window.closeRegistrationForm = closeRegistrationForm;
+	window.closeSignInForm = closeSignInForm;
+	/*function logInForm() {
 		var username = document.getElementById("username").value;
 		var password = document.getElementById("password").value;
 		sha256Hash(password).then(hashedPass => {
@@ -146,5 +148,5 @@ document.addEventListener('DOMContentLoaded', function () {
 				const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
 				return hashHex;
 			});
-	}
+	}*/
 });
