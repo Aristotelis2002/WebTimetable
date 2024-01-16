@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		formSubmitButton.addEventListener('click', logInForm)
 	}
 	
-	async function logInForm() {	
+	function logInForm() {	
 		var username = document.getElementById("username").value;
    		var password = document.getElementById("password").value;
 		password = sha256Hash(password);
