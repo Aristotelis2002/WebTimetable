@@ -44,7 +44,7 @@ class Db
 	}
 }
 
-function getUser($id)
+function getUser($id) // Don't use!
 {
     $db = new Db('users'); 
 
@@ -56,6 +56,44 @@ function getUser($id)
     if ($result->rowCount() > 0) {
         $user = $result->fetch(PDO::FETCH_ASSOC);
         return $user;
+    } else {
+        return null;
+    }
+}
+
+function doesUserExist($username) {
+	$db = new Db('users'); 
+	$username = $db->escapeString($username);
+	$sql = "SELECT * FROM users WHERE username = '$username'";
+    $result = $db->query($sql);
+	if ($result->rowCount() > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function correctUsernameAndPassword($username, $password) {
+	$db = new Db('users'); 
+	$username = $db->escapeString($username);
+	$password = $db->escapeString($password);
+	$sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+    $result = $db->query($sql);
+	if ($result->rowCount() > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function getAdminStatus($username) {
+	$db = new Db('users'); 
+	$username = $db->escapeString($username);
+	$sql = "SELECT admin FROM users WHERE username = '$username'";
+    $result = $db->query($sql);
+	if ($result->rowCount() > 0) {
+        $adminStatus = $result->fetch(PDO::FETCH_ASSOC);
+        return $adminStatus;
     } else {
         return null;
     }

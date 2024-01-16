@@ -68,4 +68,5 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 	
 	window.onload = initialization();
+	window.updateView = updateView;
 });

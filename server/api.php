@@ -1,10 +1,11 @@
 <?php
 require "db.php";
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header('Content-Type: application/json');
 
+$response = null;
 // Check if it's a POST request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Retrieve the POST data
@@ -17,19 +18,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // If either username or password is missing
         $response = array('error' => 'Both username and password are required.');
     }
-} else {
-    // If it's not a POST request
-    $response = array('error' => 'Invalid request method.');
-}
+} /* else {
+    $response = array('error' => 'Invalid request method.');  //not needed probably
+} */
 
 // Output the response as JSON
 echo json_encode($response);
 
-// Example function to process login logic
 function login($username, $password) {
-    // Implement your login logic here
-    // For demonstration purposes, just returning a success message
-    return array('message' => 'Login successful for ' . $username);
+    if(!doesUserExist($username)) {
+		return array('error' => 'Username or password is incorrect.');
+	}
+	if (!correctUsernameAndPassword($username, $password)) {
+		return array('error' => 'Username or password is incorrect.');
+	}
+	$adminStatus = getAdminStatus($username);
+	if($adminStatus === null) {
+		return array('error' => 'Admin status is null');
+	}
+    return array('message' => 'Login successful for ' . $username, 'adminStatus' => $adminStatus);
 }
 
 // header('Content-Type: application/json');
