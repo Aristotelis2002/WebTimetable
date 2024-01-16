@@ -41,13 +41,15 @@ document.addEventListener('DOMContentLoaded', function() {
 	if (formCloseButtonReg) {
 		formCloseButtonReg.addEventListener('click', closeRegistrationForm);
 	}
+
 	if (formSubmitButton) {
-		formSubmitButton.addEventListener('click', logInForm())
+		console.log("AAAAAAA")
+		formSubmitButton.addEventListener('click', logInForm)
 	}
 	
-	function logInForm() {		
-		var username = document.getElementById('username').value;
-   		var password = document.getElementById('password').value;
+	async function logInForm() {	
+		var username = document.getElementById("username").value;
+   		var password = document.getElementById("password").value;
 		password = sha256Hash(password);
 		console.log(username);
 		console.log(password);
@@ -56,22 +58,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	function register() {
 		//...
-	}
-
-	async function fetchData(username, password) {
-		try {
-			// Include both username and password parameters in the fetch URL
-			const response = await fetch(`http://localhost/demo/api.php?action=get_user&username=${username}&password=${password}`);
-			
-			if (!response.ok) {
-				throw new Error(`HTTP error! Status: ${response.status}`);
-			}
-	
-			const data = await response.json();
-			console.log(data);
-		} catch (error) {
-			console.error('Fetch error:', error.message);
-		}
 	}
 
 	async function loginUser(username, password) {
@@ -90,7 +76,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 			const data = await response.json();
 			console.log(data); // Process the response data as needed
-			console.log("fsafsa"); // Process the response data as needed
 		} catch (error) {
 			console.error('Fetch error:', error.message);
 		}

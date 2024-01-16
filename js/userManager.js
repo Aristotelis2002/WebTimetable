@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-	sessionStorage.setItem('username', 'user');
+	// sessionStorage.setItem('username', 'user');
+	sessionStorage.setItem('username', '');
 	sessionStorage.setItem('adminStatus', false);
 	
 	const logOutButton = document.getElementById("logOut-button");
