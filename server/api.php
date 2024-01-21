@@ -30,6 +30,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $response = register($username, $fn, $password);
             break;
 
+		case 'presentations':
+			//parse_str($_POST, $postData);
+			$postData = isset($_POST['data']) ? $_POST['data'] : null;
+			// Access the 'action' parameter
+			//$action = urldecode($postData['action']);
+			
+			// Access the 'jsonData' parameter
+			//$jsonData = urldecode($postData['jsonData']);
+
+			// Decode the JSON string from 'jsonData'
+			// error_log($postData,0);
+			
+			//error_log($postData,0);
+			$jsonBody = mb_convert_encoding($postData, 'UTF-8', 'ISO-8859-1');
+			error_log($jsonBody,0);
+			$decodedData = json_decode($postData, true, 512, JSON_UNESCAPED_UNICODE);
+			error_log(implode(', ', $decodedData),0);
+			// Check if decoding was successful
+			if ($decodedData === null) {
+				echo "Error decoding JSON data.\n";
+			} else {
+				// Iterate through the associative array in 'decodedData'
+				foreach ($decodedData as $key => $value) {
+					//echo "Key: $key, Value: $value\n";
+				}
+				$response = array('message' => 'success');
+			}
+			
         default:
             // If the provided action is not recognized
             $response = array('error' => 'Invalid action. Fail at js fetch to api.php');
