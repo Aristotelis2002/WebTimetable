@@ -229,4 +229,29 @@ function addInterestToDb($userId, $presentationId, $interestString) {
 	return  $result->fetch(PDO::FETCH_ASSOC);
 }
 
+function getAllInterests(){
+	$db = new Db('interests'); 
+	$sql = "SELECT userId, presentationId, interestType FROM interests";
+    $result = $db->query($sql);
+	if ($result->rowCount() > 0) {	
+        $interestsRow = $result->fetchAll(PDO::FETCH_ASSOC);
+        return $interestsRow;
+    } else {
+        return null;
+    }
+}
+
+function getPresentationById($presentationId) {
+	$db = new Db('presentations'); 
+	$presentationId = $db->escapeString($presentationId);
+	$sql = "SELECT * FROM presentations WHERE id = '$presentationId'";
+    $result = $db->query($sql);
+	if ($result->rowCount() > 0) {
+        $presentation = $result->fetch(PDO::FETCH_ASSOC);
+        return $presentation;
+    } else {
+        return null;
+    }
+}
+
 ?>

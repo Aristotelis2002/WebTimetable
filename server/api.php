@@ -82,9 +82,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$interestString = isset($_POST['interestString']) ? $_POST['interestString'] : null;
             $response = addInterestToDb($userId, $presentationId, $interestString);
 			break;
-		
+			
+		case 'get_all_interests':
+			$result = getAllInterests();
+			if ($result == null) {
+				$response = array('error' => 'Data base is empty, no interests found');
+				break;
+			}
+			$response = json_encode($result);
+			break;
+			
+		case 'get_presentation_by_id':
+			$presentationId = isset($_POST['presentationId']) ? $_POST['presentationId'] : null;
+			$result = getPresentationById($presentationId);
+			if ($result == null) {
+				$response = array('error' => 'Id not found, no presentation to return');
+			}
+			$response = $result;
+			break;
         default:
-            // If the provided action is not recognized
             $response = array('error' => 'Invalid action. Fail at js fetch to api.php');
             break;
 	}
