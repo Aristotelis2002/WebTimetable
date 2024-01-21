@@ -28,7 +28,7 @@ header {
 main {
 	width: 100%;
 	margin: 0 auto;
-	background-color: #f5fdff;
+	background-color: #333;
 }
 
 footer {
@@ -236,16 +236,41 @@ h2 {
 /*Table*/
 
 table {
-  width: 100%;
+  width: 99%;
   border-collapse: collapse;
   margin-top: 20px;
-  font-family: 'Corbel Light', sans-serif;
+  margin-left: 0.5%;
+  margin-right: 0.5%;
+}
+
+table tr td:nth-child(1) {
+  width: 2%;
+}
+table tr td:nth-child(2) {
+  width: 4%;
+}
+table tr td:nth-child(3) {
+  width: 10%;
+}
+table tr td:nth-child(4) {
+  width: 4%;
+}
+table tr td:nth-child(5) {
+  width: 20%;
+}
+table tr td:nth-child(6) {
+  width: 8%;
+}
+table tr td:nth-child(8) {
+  width: 15%;
+  padding: 0px;
 }
 
 th, td {
   border: 1px solid #dddddd;
   padding: 8px;
   text-align: left;
+  background-color: #f5fdff;
 }
 
 th {
@@ -257,9 +282,14 @@ th {
 	width: 100%;
 	border: none;
 	height: 100%;
-	background-color: #ccc;
 	font-family: 'Corbel Light', sans-serif;
-	color: #000;
+	background-color: #ccc;
+	float: right;
+	transition-duration: 0.5s;
+}
+
+.tableDropList:hover {
+	background-image: linear-gradient(0deg, #69d6f5, #90b3be);
 }
 
 /*outdated?*/
@@ -313,6 +343,11 @@ form input {
 form input:focus{
   background-color: #ddd;
   outline: none;
+}
+
+.errorMsg {
+	color: #f00;
+	display: none;
 }
 
 form button {

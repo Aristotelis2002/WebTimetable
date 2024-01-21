@@ -25,6 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
 			document.getElementById("contentMenu").style.display = "none";
 			document.getElementById("title-image").style.display = "none";
 			document.getElementById("title-video").style.display = "block";
+			document.getElementById('tableSelect').value = "all";
+			for(let i = 0; i < tables.length; i++) {
+				var table = document.getElementById(tables[i]).style.display = "";
+			}
 			toggleLastColumnVisibility(true);
 		}
 	}
@@ -60,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		sha256Hash(password).then(hashedPass => {
 			loginUser(username, hashedPass);
 			clearDropdownValues();
+			// TODO load interests																!!!
 		}).catch(error => {
 			console.error('Error with sha256:', error);
 		});
@@ -91,6 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 
 			const data = await response.json(); //json data has an error, message, adminStatus
+			var errorLabel = document.getElementById("errorMessageLogIn");
 			if (data.error == null) {
 				// Login successful
 				sessionStorage.setItem('username', username);
@@ -100,12 +106,13 @@ document.addEventListener('DOMContentLoaded', function() {
 					sessionStorage.setItem('adminStatus', true);
 				}
 				closeSignInForm();
+				errorLabel.style.display = "none";
 				updateView();
 			} else {
 				// Login failed
 				console.log("The error message is " + data.error);
-				// TODO
-				// We should implement some logic for the frontend here
+				
+				errorLabel.style.display = "block";
 			}
 
 		} catch (error) {
@@ -127,17 +134,19 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 
 			const data = await response.json(); //json data has an error, message, adminStatus
+			var errorLabel = document.getElementById("errorMessageRegister");
 			if (data.error == null) {
 				// Registration succesfull
 				console.log(data);
 				loginUser(username, password);
 				closeRegistrationForm();
+				errorLabel.style.display = "none";
 				// Functionality after registration
 			} else {
 				// Login failed
 				console.log("The error message is " + data.error);
-				// TODO
-				// We should implement some logic for the frontend here
+				
+				errorLabel.style.display = "block";
 			}
 
 		} catch (error) {
@@ -157,20 +166,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 	
 	function initialization() {
-		
-		createTable('1');
-		for (var i = 0; i < 10 ; i++) {
-			addRow('1');
-		}
-		createTable('2');
-		for (var i = 0; i < 5 ; i++) {
-			addRow('2');
-		}
-
 		if(sessionStorage.getItem('username') == null) {
 			sessionStorage.setItem('username', '');
 		}
-
+		//load tables from db																		!!!
 		updateView();
 	}
 	
