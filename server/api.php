@@ -52,16 +52,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$dict = turnPresentationsIntoDict($result);
 			$response = json_encode($dict);
 			break;
+			
+		case 'drop_presentations':
+			dropAllPresentations();
+			$response = array('message' => 'success');
+			break;
+		
+		case 'get_presentation_id':
+			$fn = isset($_POST['fn']) ? $_POST['fn'] : null;
+			$result = getPresentationId($fn);
+			if ($result == null) {
+				$response = array('error' => 'Fn not found, no Id to return');
+			}
+			$response = $result;
+			break;
+		
+		case 'get_user_id':
+			$username = isset($_POST['username']) ? $_POST['username'] : null;
+			$result = getUserIdByUsername($username);
+			if ($result == null) {
+				$response = array('error' => 'Username not found, no Id to return');
+			}
+			$response = $result;
+			break;
+			
+		case 'add_interest':
+			$userId = isset($_POST['userId']) ? $_POST['userId'] : null;
+            $presentationId = isset($_POST['presentationId']) ? $_POST['presentationId'] : null;
+			$interestString = isset($_POST['interestString']) ? $_POST['interestString'] : null;
+            $response = addInterestToDb($userId, $presentationId, $interestString);
+			break;
+		
         default:
             // If the provided action is not recognized
             $response = array('error' => 'Invalid action. Fail at js fetch to api.php');
             break;
 	}
     
-} /* else {
-    $response = array('error' => 'Invalid request method.');  //not needed probably
-} */
-
+} 
 // Output the response as JSON
 echo json_encode($response);
 
@@ -87,55 +115,4 @@ function register($username, $fn, $password) {
 	return array('message' => 'Registration successful for ' . $username, 'DBresponse' => $output);
 }
 
-// header('Content-Type: application/json');
-
-// Check if a "action" parameter is provided in the request
-/*
-if (isset($_GET['action'])) {
-    $action = $_GET['action'];
-
-    // Perform different actions based on the provided "action" parameter
-    switch ($action) {
-        case 'get_user':
-            if (isset($_GET['username']) && isset($_GET['password'])) {
-			$username = $_GET['username'];
-			$password = $_GET['password'];
-
-			// Process the GET request based on the provided username and password
-			$response = array('message' => "Hello, $username! Your hashed password is $password.");
-		} else {
-			// If either username or password parameter is missing
-			$response = array('error' => 'Both username and password parameters are required.');
-		}
-            break;
-
-        case 'create_user':
-            // Handle the "create_user" action
-            $username = isset($_POST['username']) ? $_POST['username'] : null;
-            $password = isset($_POST['password']) ? $_POST['password'] : null;
-            $response = createUser($username, $password);
-            break;
-
-        default:
-            // If the provided action is not recognized
-            $response = array('error' => 'Invalid action');
-            break;
-    }
-} else {
-    // If no "action" parameter is provided
-    $response = array('error' => 'Action parameter is missing');
-}
-
-// Output the response as JSON
-echo json_encode($response);
-
-// Example function to get user information
-
-
-// Example function to create a new user
-function createUser($username, $password) {
-    // Implement logic to create a new user based on $username and $password
-    // Return success message or an error message
-    return array('message' => 'User created successfully');
-}*/
 ?>

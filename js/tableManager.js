@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		for (var key in dictionary) {
 			if (dictionary.hasOwnProperty(key)) {
 				var tableId = "table" + key;
-				console.log(tableId);
+				// console.log(tableId);
 				
 				createTable(tableId);
 				
@@ -254,13 +254,101 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	}
 	
+	// Можеш да преместиш където искаш тези функции които съм дефинирал 
+	async function getPresentationIdByFN(fn) {
+		try {
+			const response = await fetch('http://localhost/demo/api.php', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: `action=${encodeURIComponent('get_presentation_id')}&fn=${encodeURIComponent(fn)}`,
+			});
+
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+
+			const data = await response.json(); //json data has an error or id field
+			if (data.error == null) {
+				// getId successful
+				console.log(data.id);
+				return data.id;
+			} else {
+				// getId failed
+				console.log("The error message is " + data.error);
+			}
+
+		} catch (error) {
+			console.error('Fetch error:', error.message);
+		}
+	}
+
+	async function getIdByUsername(username) {
+		try {
+			const response = await fetch('http://localhost/demo/api.php', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: `action=${encodeURIComponent('get_user_id')}&username=${encodeURIComponent(username)}`,
+			});
+
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+
+			const data = await response.json(); //json data has an error or userId field
+			if (data.error == null) {
+				// getId successful
+				console.log(data.userId);
+				return data.userId;
+			} else {
+				// getId failed
+				console.log("The error message is " + data.error);
+			}
+
+		} catch (error) {
+			console.error('Fetch error:', error.message);
+		}
+	}
 	
+	async function addInterestToDB(currentUserId, presentationId, interestString) {
+		try {
+			const response = await fetch('http://localhost/demo/api.php', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: `action=${encodeURIComponent('add_interest')}&userId=${encodeURIComponent(currentUserId)}&presentationId=${encodeURIComponent(presentationId)}&interestString=${encodeURIComponent(interestString)}`,
+			});
+
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+
+			const data = await response.json(); //json data has an error, message, adminStatus
+			if (data.error == null) {
+				// interest insert succesful
+			} else {
+				// interest insert failed
+				console.log("The error message is " + data.error);
+			}
+
+		} catch (error) {
+			console.error('Fetch error:', error.message);
+		}
+	}
+	// Край на функциите които съм дефинирал
 
 	var selects = document.querySelectorAll('.tableDropList');
 
     selects.forEach(function(select) {
       select.addEventListener('change', function() {
-        //send to db																			!!!
+        //send to db
+		// var presenetationId = getPresentationIdByFN(fn) //ne znam kak da vzema fn ot tablicata
+		// var currentUserId = getIdByUsername(sessionStorage.getItem('username')); //moje bi proverka za !=''
+		// addInterestToDB(currentUserId, presentationId, "Трябва да отида"); // не знам как да взема интерес текста от таблицата
       });
     });
 	

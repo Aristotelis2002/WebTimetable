@@ -76,7 +76,30 @@ document.addEventListener('DOMContentLoaded', function() {
 		// console.log(dictionary); //logging
 		return dictionary;
 	}
+	async function dropOldDataFromBase() {
+		try {
+			const response = await fetch('http://localhost/demo/api.php', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: `action=${encodeURIComponent('drop_presentations')}`,
+			});
 	
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+	
+			const data = await response.json(); //json data has message
+			if (data.error == null) {
+			} else {
+				console.log("The error message is " + data.error);
+			}
+	
+		} catch (error) {
+			console.error('Fetch error:', error.message);
+		}
+	}
 	async function addPresentationsToBase(presentations) {
 		var jsonData = JSON.stringify(presentations);
 		try {
@@ -95,8 +118,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			const data = await response.json(); //json data has 
 			if (data.error == null) {
 				// adding to DB successful
-				// console.log(data);
-				// Functionality after adding
 			} else {
 				console.log("The error message is " + data.error);
 				// TODO
@@ -118,12 +139,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 			reader.onload = function (e) {
 				dictionary = parseCSV(e.target.result);
-				// document.getElementById("myDiv").innerHTML = JSON.stringify(dictionary); //delete later
-				if (Object.keys(dictionary).length > 0 ) { // add more logic for validation of dictioanry
-					// ако има да се добавя валидация или нещо такова
+				if (Object.keys(dictionary).length > 0 ) { 
 					loadTables(dictionary);
-					//dropOldDataFromBase(); //TODO
-					// addPresentationsToBase(dictionary); // funckiqta dobavq presentaciite kum db-to
+					dropOldDataFromBase(); 
+					// dropInterestsFromBase(); ??
+					addPresentationsToBase(dictionary); 
 				}
 			};
 	
@@ -157,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				alert("No data base available to load\n Error msg: " + data.error ); //vmesto tozi alert нещо друго
 				
 				// TODO
-				// Да смени този алерт с каквото предложиш
+				// Зари, смени този алерт с каквото искаш
 			}
 	
 		} catch (error) {

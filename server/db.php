@@ -71,18 +71,14 @@ function convertSQLDateFormatToJS($inputDate) {
 }
 
 
-function getUser($id) // Don't use!
-{
-    $db = new Db('users'); 
-
-    $id = $db->escapeString($id);
-
-    $sql = "SELECT * FROM users WHERE userId = $id";
+function getUserIdByUsername($username) {
+	$db = new Db('users'); 
+	$username = $db->escapeString($username);
+	$sql = "SELECT userId FROM users WHERE username = '$username'";
     $result = $db->query($sql);
-	//echo implode(" ", $result);
-    if ($result->rowCount() > 0) {
-        $user = $result->fetch(PDO::FETCH_ASSOC);
-        return $user;
+	if ($result->rowCount() > 0) {
+        $id = $result->fetch(PDO::FETCH_ASSOC);
+        return $id;
     } else {
         return null;
     }
@@ -141,7 +137,6 @@ function addPresentationToDB($orderId, $date, $hour, $fn , $groupStudent, $name,
 	$date = convertDateFormatToSQL($date);
 	$fn = $db->escapeString($fn);
 	$name = $db->escapeString($name);
-	//$topicId = $db->escapeString($topicId);
 	$topic = $db->escapeString($topic);
 	$sql = "INSERT INTO `presentations` (`id`, `orderId`, `date`, `hour`, `fn`, `groupStudent`, `name`, `topicId`, `topic`) VALUES (NULL, '$orderId', '$date', '$hour', '$fn' , '$groupStudent' , '$name' , '$topicId', '$topic')";
 	$result = $db->query($sql);
@@ -195,15 +190,43 @@ function turnPresentationsIntoDict($presentations) {
 	$dictionary = [];
 
 	foreach ($presentations as $subArray) {
-			if (isset($subArray["date"])) {
-				// Assign the sub-array to the dictionary using the value at index "date" as the key
-				$keyDict = $subArray["date"];
-				if(!array_key_exists($keyDict, $dictionary)){
-					$dictionary[$keyDict] = [];
-				}
-				array_push($dictionary[$keyDict], extractEverythingButDate($subArray));
+		if (isset($subArray["date"])) {
+			$keyDict = $subArray["date"];
+			if(!array_key_exists($keyDict, $dictionary)){
+				$dictionary[$keyDict] = [];
 			}
+			array_push($dictionary[$keyDict], extractEverythingButDate($subArray));
+		}
 	}
 	return $dictionary;
 }
+
+function dropAllPresentations() {
+	$db = new Db('presentations'); 
+	$sql = "TRUNCATE TABLE presentations";
+    $result = $db->query($sql);
+	return  $result->fetch(PDO::FETCH_ASSOC);
+}
+
+function getPresentationId($fn) {
+	$db = new Db('presentations'); 
+	$fn = $db->escapeString($fn);
+	$sql = "SELECT id FROM presentations WHERE fn = '$fn'";
+    $result = $db->query($sql);
+	if ($result->rowCount() > 0) {
+        $id = $result->fetch(PDO::FETCH_ASSOC);
+        return $id;
+    } else {
+        return null;
+    }
+}
+
+function addInterestToDb($userId, $presentationId, $interestString) {
+	$db = new Db('interests'); 
+	$interestString = $db->escapeString($interestString);
+	$sql = "INSERT INTO `interests` (`id`, `userId`, `presentationId`, `interestType`) VALUES (NULL, '$userId', '$presentationId', '$interestString')";
+	$result = $db->query($sql);
+	return  $result->fetch(PDO::FETCH_ASSOC);
+}
+
 ?>
