@@ -44,6 +44,33 @@ class Db
 	}
 }
 
+function convertDateFormatToSQL($inputDate) {
+	 $date = DateTime::createFromFormat('d.m.Y', $inputDate);
+    
+    if ($date) {
+        // Convert the date to the desired format
+        $outputDate = $date->format('Y-m-d');
+        return $outputDate;
+    } else {
+        // Invalid input date format
+        return "Invalid date format. Please use DD.MM.YYYY.";
+    }
+}
+
+function convertSQLDateFormatToJS($inputDate) {
+	 $date = DateTime::createFromFormat('Y-m-d', $inputDate);
+     
+    if ($date) {
+        // Convert the date to the desired format
+        $outputDate = $date->format('d.m.Y');
+        return $outputDate;
+    } else {
+        // Invalid input date format
+        return "Invalid date format";
+    }
+}
+
+
 function getUser($id) // Don't use!
 {
     $db = new Db('users'); 
@@ -107,5 +134,76 @@ function addUserToDB($username, $fn, $password){
 	$sql = "INSERT INTO `users` (`userId`, `fn`, `username`, `password`, `admin`) VALUES (NULL, '$fn', '$username', '$password', '0')";
 	$result = $db->query($sql);
 	return  $result->fetch(PDO::FETCH_ASSOC); // maybe error causing
+}
+
+function addPresentationToDB($orderId, $date, $hour, $fn , $groupStudent, $name, $topicId, $topic){
+	$db = new Db('presentations'); 
+	$date = convertDateFormatToSQL($date);
+	$fn = $db->escapeString($fn);
+	$name = $db->escapeString($name);
+	//$topicId = $db->escapeString($topicId);
+	$topic = $db->escapeString($topic);
+	$sql = "INSERT INTO `presentations` (`id`, `orderId`, `date`, `hour`, `fn`, `groupStudent`, `name`, `topicId`, `topic`) VALUES (NULL, '$orderId', '$date', '$hour', '$fn' , '$groupStudent' , '$name' , '$topicId', '$topic')";
+	$result = $db->query($sql);
+	return  $result->fetch(PDO::FETCH_ASSOC); // maybe error causing
+}
+
+function getAllPresentations(){
+	$db = new Db('presentations'); 
+	$sql = "SELECT `orderId`, `date`, `hour`, `fn`, `groupStudent`, `name`, `topicId`, `topic`  FROM `presentations`";
+    $result = $db->query($sql);
+	if ($result->rowCount() > 0) {
+        $presentationsRows = $result->fetchAll(PDO::FETCH_ASSOC);
+        return $presentationsRows;
+    } else {
+        return null;
+    }
+}
+
+function fixAllDates($presentations) {
+	foreach ($presentations as &$value) {
+		if (isset($value["date"])){
+			$value["date"] = convertSQLDateFormatToJS($value["date"]);	
+		}
+	}
+	return $presentations;
+}
+
+function fixEmptyInts($presentations) {
+	foreach ($presentations as &$value) {
+		if ($value["fn"] == '') {
+			$value["groupStudent"] = '';
+		}
+		if ($value["topicId"] == 0) {
+			$value["topicId"] = '';
+		}
+	}
+	return $presentations;
+}
+
+function extractEverythingButDate($arrayPresnetation) {
+	$res = [];
+	foreach($arrayPresnetation as $key => $value){
+		if($key != "date") {
+			array_push($res, $value);
+		}
+	}
+	return $res;
+}
+
+function turnPresentationsIntoDict($presentations) {
+	$dictionary = [];
+
+	foreach ($presentations as $subArray) {
+			if (isset($subArray["date"])) {
+				// Assign the sub-array to the dictionary using the value at index "date" as the key
+				$keyDict = $subArray["date"];
+				if(!array_key_exists($keyDict, $dictionary)){
+					$dictionary[$keyDict] = [];
+				}
+				array_push($dictionary[$keyDict], extractEverythingButDate($subArray));
+			}
+	}
+	return $dictionary;
 }
 ?>

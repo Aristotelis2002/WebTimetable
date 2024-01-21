@@ -122,6 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				if (Object.keys(dictionary).length > 0 ) { // add more logic for validation of dictioanry
 					// ако има да се добавя валидация или нещо такова
 					loadTables(dictionary);
+					//dropOldDataFromBase(); //TODO
 					//addPresentationsToBase(dictionary); // moje da q zakomentirash
 				}
 			};
@@ -137,5 +138,37 @@ document.addEventListener('DOMContentLoaded', function() {
 	// }
 	// myFunction();
 	
+	//LOAD table
+	async function extractDataFromBase() {
+		try {
+			const response = await fetch('http://localhost/demo/api.php', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: `action=${encodeURIComponent('load_presentations')}`,
+			});
+	
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+	
+			const data = await response.json(); 
+			let parsedData = JSON.parse(data);
+			if (parsedData.error == null) {
+				// getting data
+				// console.log(parsedData);
+				loadTables(parsedData);
+			} else {
+				console.log("The error message is " + data.error);
+				// TODO
+				// We should implement some logic for the frontend here
+			}
+	
+		} catch (error) {
+			console.error('Fetch error:', error.message);
+		}
+	}
+	extractDataFromBase();
 	window.handleFile = handleFile;
 });
