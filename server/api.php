@@ -33,22 +33,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		case 'presentations':
 			$postData = isset($_POST['data']) ? $_POST['data'] : null;
 			$decoded_json = json_decode($postData, true);
-			//$counter = 0;
-			//$msg = null;
+
 			foreach ($decoded_json as $key => $value) {
 				foreach($value as $row) {
-					//error_log($row[1], 0);
-					//if($counter == 0) {
-					//	$counter = $counter + 1;
 					$msg = addPresentationToDB($row[0], $key, $row[1], $row[2] , $row[3], $row[4], $row[5], $row[6]);
-						//$msg = addPresentationToDB($row[0], $key, $row[1], '' , '', '', '', '');
-					//}
 				}
 			}
 			$response = array('message' => 'success');
 			
 		case 'load_presentations':
 			$result = getAllPresentations();
+			if ($result == null) {
+				$response = array('error' => 'Data base is empty');
+				break;
+			}
 			$result = fixAllDates($result);
 			$result = fixEmptyInts($result);
 			$dict = turnPresentationsIntoDict($result);

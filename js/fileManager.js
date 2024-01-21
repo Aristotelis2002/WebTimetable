@@ -54,9 +54,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	function parseCSV(csv) {
 		var lines = csv.split("\n");
 		startOfImportantRows = getIndexFirstImportantRow(lines)
-		console.log("Days:");
+		// console.log("Days:");
 		days = getDays(lines);
-		console.log(days); //logging
+		// console.log(days); //logging
 		dictionary = {};
 		days.forEach(function (element) {
 			dictionary[element] = [];
@@ -67,13 +67,13 @@ document.addEventListener('DOMContentLoaded', function() {
 			var indexesOfPresentationIDs = getIndexOfIDs(currentLine);
 			if (indexesOfPresentationIDs.length > 0) {
 				var presentationsObjects = getAllObjectsFromRow(currentLine, indexesOfPresentationIDs);
-				console.log(presentationsObjects);
+				// console.log(presentationsObjects);
 				for (let j = 0; j < days.length; j++) {
 					dictionary[days[j]].push(presentationsObjects[j]);
 				}
 			}
 		}
-		console.log(dictionary); //logging
+		// console.log(dictionary); //logging
 		return dictionary;
 	}
 	
@@ -94,9 +94,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 			const data = await response.json(); //json data has 
 			if (data.error == null) {
-				// Registration succesfull
-				console.log(data);
-				// Functionality after registration
+				// adding to DB successful
+				// console.log(data);
+				// Functionality after adding
 			} else {
 				console.log("The error message is " + data.error);
 				// TODO
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	function handleFile() {
 		var fileInput = document.getElementById('fileInput');
-		console.log("doing somethign");
+		// console.log("doing somethign");
 		if (fileInput.files.length > 0) {
 			var file = fileInput.files[0];
 	
@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					// ако има да се добавя валидация или нещо такова
 					loadTables(dictionary);
 					//dropOldDataFromBase(); //TODO
-					//addPresentationsToBase(dictionary); // moje da q zakomentirash
+					// addPresentationsToBase(dictionary); // funckiqta dobavq presentaciite kum db-to
 				}
 			};
 	
@@ -132,11 +132,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			console.log("No file selected.");
 		}
 	}
-
-	// function myFunction() {
-	//     document.getElementById("myDiv").innerHTML = JSON.stringify(csvDataArray);
-	// }
-	// myFunction();
 	
 	//LOAD table
 	async function extractDataFromBase() {
@@ -154,15 +149,15 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 	
 			const data = await response.json(); 
-			let parsedData = JSON.parse(data);
-			if (parsedData.error == null) {
-				// getting data
-				// console.log(parsedData);
+			if (data.error == null) {
+				// getting data from JSON response
+				let parsedData = JSON.parse(data);
 				loadTables(parsedData);
 			} else {
-				console.log("The error message is " + data.error);
+				alert("No data base available to load\n Error msg: " + data.error ); //vmesto tozi alert нещо друго
+				
 				// TODO
-				// We should implement some logic for the frontend here
+				// Да смени този алерт с каквото предложиш
 			}
 	
 		} catch (error) {
