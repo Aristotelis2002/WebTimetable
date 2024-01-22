@@ -440,14 +440,46 @@ document.addEventListener('DOMContentLoaded', function() {
 	// Край на функциите които съм дефинирал
 
 	// Тука ще дефинирам последните две функции които споменах в масангера
-	async function getAllInterests() {
+	// async function getAllInterests() {
+	// 	try {
+	// 		const response = await fetch('http://localhost/demo/api.php', {
+	// 			method: 'POST',
+	// 			headers: {
+	// 				'Content-Type': 'application/x-www-form-urlencoded',
+	// 			},
+	// 			body: `action=${encodeURIComponent('get_all_interests')}`,
+	// 		});
+	
+	// 		if (!response.ok) {
+	// 			throw new Error(`HTTP error! Status: ${response.status}`);
+	// 		}
+	
+	// 		const data = await response.json(); 
+	// 		if (data.error == null) {
+	// 			// getting data from JSON response
+	// 			let parsedData = JSON.parse(data);
+	// 			return parsedData;
+	// 			// loadTables(parsedData);
+	// 		} else {
+	// 			// normalno e da vurne erro pri prazna tablica.
+	// 			alert(data.error ); //vmesto tozi alert нещо друго
+				
+	// 			// TODO
+	// 			// Зари, смени този алерт с каквото искаш
+	// 		}
+	
+	// 	} catch (error) {
+	// 		console.error('Fetch error:', error.message);
+	// 	}
+	// }
+	async function getUserInterests(userId) {
 		try {
 			const response = await fetch('http://localhost/demo/api.php', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
-				body: `action=${encodeURIComponent('get_all_interests')}`,
+				body: `action=${encodeURIComponent('get_interests')}&userId=${encodeURIComponent(userId)}`,
 			});
 	
 			if (!response.ok) {
@@ -473,35 +505,34 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	}
 	// getAllInterests();
-	async function getPresntationInfoById (presentationId) {
-		try {
-			const response = await fetch('http://localhost/demo/api.php', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
-				body: `action=${encodeURIComponent('get_presentation_by_id')}&presentationId=${encodeURIComponent(presentationId)}`,
-			});
+	// async function getPresntationInfoById (presentationId) {
+	// 	try {
+	// 		const response = await fetch('http://localhost/demo/api.php', {
+	// 			method: 'POST',
+	// 			headers: {
+	// 				'Content-Type': 'application/x-www-form-urlencoded',
+	// 			},
+	// 			body: `action=${encodeURIComponent('get_presentation_by_id')}&presentationId=${encodeURIComponent(presentationId)}`,
+	// 		});
 
-			if (!response.ok) {
-				throw new Error(`HTTP error! Status: ${response.status}`);
-			}
+	// 		if (!response.ok) {
+	// 			throw new Error(`HTTP error! Status: ${response.status}`);
+	// 		}
 
-			const data = await response.json(); //json data has an error or id field
-			if (data.error == null) {
-				// getPresentation successful
-				console.log(data);
-				return data;
-			} else {
-				// getPresentation failed
-				console.log("The error message is " + data.error);
-			}
+	// 		const data = await response.json(); //json data has an error or id field
+	// 		if (data.error == null) {
+	// 			// getPresentation successful
+	// 			console.log(data);
+	// 			return data;
+	// 		} else {
+	// 			// getPresentation failed
+	// 			console.log("The error message is " + data.error);
+	// 		}
 
-		} catch (error) {
-			console.error('Fetch error:', error.message);
-		}
-
-	}
+	// 	} catch (error) {
+	// 		console.error('Fetch error:', error.message);
+	// 	}
+	// }
 	// getPresntationInfoById(33);
 	// Край на дефинициите	
 	
@@ -515,4 +546,35 @@ document.addEventListener('DOMContentLoaded', function() {
 	window.getAllInterests = getAllInterests;
 	window.getPresntationInfoById = getPresntationInfoById;
 	
+	// Da se premesti funkciqta
+	async function getAdminStatus(username) {
+		try {
+			const response = await fetch('http://localhost/demo/api.php', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: `action=${encodeURIComponent('get_admin_status')}&username=${encodeURIComponent(username)}`,
+			});
+
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+
+			const data = await response.json(); //json data has an error, message, adminStatus
+			var errorLabel = document.getElementById("errorMessageLogIn");
+			if (data.error == null) {
+				if (data.adminStatus.admin == 0) {
+					return false;
+				} else {
+					return true;
+				}
+			} else {
+				console.log("The error message is " + data.error);
+			}
+
+		} catch (error) {
+			console.error('Fetch error:', error.message);
+		}
+	}
 });

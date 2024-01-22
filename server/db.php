@@ -208,6 +208,13 @@ function dropAllPresentations() {
 	return  $result->fetch(PDO::FETCH_ASSOC);
 }
 
+function dropAllInterests() {
+	$db = new Db('interests'); 
+	$sql = "TRUNCATE TABLE interests";
+    $result = $db->query($sql);
+	return  $result->fetch(PDO::FETCH_ASSOC);
+}
+
 function getPresentationId($fn) {
 	$db = new Db('presentations'); 
 	$fn = $db->escapeString($fn);
@@ -237,6 +244,18 @@ function addInterestToDb($userId, $presentationId, $interestString) {
 function getAllInterests(){
 	$db = new Db('interests'); 
 	$sql = "SELECT userId, presentationId, interestType FROM interests";
+    $result = $db->query($sql);
+	if ($result->rowCount() > 0) {	
+        $interestsRow = $result->fetchAll(PDO::FETCH_ASSOC);
+        return $interestsRow;
+    } else {
+        return null;
+    }
+}
+
+function getUserInterests($userId) {
+	$db = new Db('interests'); 
+	$sql = "SELECT orderId, date, hour, fn, groupStudent, name, topicId, topic FROM interests JOIN presentations ON presentations.id = presentationId WHERE interests.userId = '$userId'" ;
     $result = $db->query($sql);
 	if ($result->rowCount() > 0) {	
         $interestsRow = $result->fetchAll(PDO::FETCH_ASSOC);

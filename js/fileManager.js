@@ -100,6 +100,30 @@ document.addEventListener('DOMContentLoaded', function() {
 			console.error('Fetch error:', error.message);
 		}
 	}
+	async function dropInterestsFromBase() {
+		try {
+			const response = await fetch('http://localhost/demo/api.php', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: `action=${encodeURIComponent('drop_interests')}`,
+			});
+	
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+	
+			const data = await response.json(); //json data has message
+			if (data.error == null) {
+			} else {
+				console.log("The error message is " + data.error);
+			}
+	
+		} catch (error) {
+			console.error('Fetch error:', error.message);
+		}
+	}
 	async function addPresentationsToBase(presentations) {
 		var jsonData = JSON.stringify(presentations);
 		try {
@@ -142,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				if (Object.keys(dictionary).length > 0 ) { 
 					loadTables(dictionary);
 					dropOldDataFromBase(); 
-					// dropInterestsFromBase(); ??
+					dropInterestsFromBase(); 
 					addPresentationsToBase(dictionary); 
 					console.log("adding to db successful");
 				}

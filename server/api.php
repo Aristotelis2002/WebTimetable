@@ -30,6 +30,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $response = register($username, $fn, $password);
             break;
 
+		case 'get_admin_status':
+			$username = isset($_POST['username']) ? $_POST['username'] : null;
+			getAdminStatus($username);
+			if($adminStatus === null) {
+				return array('error' => 'Admin status is null');
+			}
+			return array('message' => 'Login successful for ' . $username, 'adminStatus' => $adminStatus);
+			
 		case 'presentations':
 			$postData = isset($_POST['data']) ? $_POST['data'] : null;
 			$decoded_json = json_decode($postData, true);
@@ -58,6 +66,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$response = array('message' => 'success');
 			break;
 		
+		case 'drop_interests':
+			dropAllInterests();
+			$response = array('message' => 'success');
+			break;
+			
 		case 'get_presentation_id':
 			$fn = isset($_POST['fn']) ? $_POST['fn'] : null;
 			$result = getPresentationId($fn);
@@ -83,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $response = addInterestToDb($userId, $presentationId, $interestString);
 			break;
 			
-		case 'get_all_interests':
+		/*case 'get_all_interests':
 			$result = getAllInterests();
 			if ($result == null) {
 				$response = array('error' => 'Data base is empty, no interests found');
@@ -91,15 +104,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			}
 			$response = json_encode($result);
 			break;
-			
-		case 'get_presentation_by_id':
+			*/
+		case 'get_interests':
+			$userId = isset($_POST['userId']) ? $_POST['userId'] : null;
+			$result = getUserInterests($userId);
+			if ($result == null) {
+				$response = array('error' => 'Data base is empty, no interests found');
+				break;
+			}
+			$response = json_encode($result);
+			break;
+		
+		/*case 'get_presentation_by_id':
 			$presentationId = isset($_POST['presentationId']) ? $_POST['presentationId'] : null;
 			$result = getPresentationById($presentationId);
 			if ($result == null) {
 				$response = array('error' => 'Id not found, no presentation to return');
 			}
 			$response = $result;
-			break;
+			break; */
         default:
             $response = array('error' => 'Invalid action. Fail at js fetch to api.php');
             break;
