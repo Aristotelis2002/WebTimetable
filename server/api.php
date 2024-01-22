@@ -30,44 +30,105 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $response = register($username, $fn, $password);
             break;
 
-		case 'presentations':
-			//parse_str($_POST, $postData);
-			$postData = isset($_POST['data']) ? $_POST['data'] : null;
-			// Access the 'action' parameter
-			//$action = urldecode($postData['action']);
-			
-			// Access the 'jsonData' parameter
-			//$jsonData = urldecode($postData['jsonData']);
-
-			// Decode the JSON string from 'jsonData'
-			// error_log($postData,0);
-			
-			//error_log($postData,0);
-			$jsonBody = mb_convert_encoding($postData, 'UTF-8', 'ISO-8859-1');
-			error_log($jsonBody,0);
-			$decodedData = json_decode($postData, true, 512, JSON_UNESCAPED_UNICODE);
-			error_log(implode(', ', $decodedData),0);
-			// Check if decoding was successful
-			if ($decodedData === null) {
-				echo "Error decoding JSON data.\n";
-			} else {
-				// Iterate through the associative array in 'decodedData'
-				foreach ($decodedData as $key => $value) {
-					//echo "Key: $key, Value: $value\n";
-				}
-				$response = array('message' => 'success');
+		case 'get_admin_status':
+			$username = isset($_POST['username']) ? $_POST['username'] : null;
+			$adminStatus = getAdminStatus($username);
+			if($adminStatus === null) {
+				return array('error' => 'Admin status is null');
 			}
+			return array('message' => 'Login successful for ' . $username, 'adminStatus' => $adminStatus);
 			
+		case 'presentations':
+			$postData = isset($_POST['data']) ? $_POST['data'] : null;
+			$decoded_json = json_decode($postData, true);
+
+			foreach ($decoded_json as $key => $value) {
+				foreach($value as $row) {
+					$msg = addPresentationToDB($row[0], $key, $row[1], $row[2] , $row[3], $row[4], $row[5], $row[6]);
+				}
+			}
+			$response = array('message' => 'success');
+			
+		case 'load_presentations':
+			$result = getAllPresentations();
+			if ($result == null) {
+				$response = array('error' => 'Data base is empty');
+				break;
+			}
+			$result = fixAllDates($result);
+			$result = fixEmptyInts($result);
+			$dict = turnPresentationsIntoDict($result);
+			$response = json_encode($dict);
+			break;
+			
+		case 'drop_presentations':
+			dropAllPresentations();
+			$response = array('message' => 'success');
+			break;
+		
+		case 'drop_interests':
+			dropAllInterests();
+			$response = array('message' => 'success');
+			break;
+			
+		case 'get_presentation_id':
+			$fn = isset($_POST['fn']) ? $_POST['fn'] : null;
+			$result = getPresentationId($fn);
+			if ($result == null) {
+				$response = array('error' => 'Fn not found, no Id to return');
+			}
+			$response = $result;
+			break;
+		
+		case 'get_user_id':
+			$username = isset($_POST['username']) ? $_POST['username'] : null;
+			$result = getUserIdByUsername($username);
+			if ($result == null) {
+				$response = array('error' => 'Username not found, no Id to return');
+			}
+			$response = $result;
+			break;
+			
+		case 'add_interest':
+			$userId = isset($_POST['userId']) ? $_POST['userId'] : null;
+            $presentationId = isset($_POST['presentationId']) ? $_POST['presentationId'] : null;
+			$interestString = isset($_POST['interestString']) ? $_POST['interestString'] : null;
+            $response = addInterestToDb($userId, $presentationId, $interestString);
+			break;
+			
+		/*case 'get_all_interests':
+			$result = getAllInterests();
+			if ($result == null) {
+				$response = array('error' => 'Data base is empty, no interests found');
+				break;
+			}
+			$response = json_encode($result);
+			break;
+			*/
+		case 'get_interests':
+			$userId = isset($_POST['userId']) ? $_POST['userId'] : null;
+			$result = getUserInterests($userId);
+			if ($result == null) {
+				$response = array('error' => 'Data base is empty, no interests found');
+				break;
+			}
+			$response = json_encode($result);
+			break;
+		
+		/*case 'get_presentation_by_id':
+			$presentationId = isset($_POST['presentationId']) ? $_POST['presentationId'] : null;
+			$result = getPresentationById($presentationId);
+			if ($result == null) {
+				$response = array('error' => 'Id not found, no presentation to return');
+			}
+			$response = $result;
+			break; */
         default:
-            // If the provided action is not recognized
             $response = array('error' => 'Invalid action. Fail at js fetch to api.php');
             break;
 	}
     
-} /* else {
-    $response = array('error' => 'Invalid request method.');  //not needed probably
-} */
-
+} 
 // Output the response as JSON
 echo json_encode($response);
 
@@ -93,55 +154,4 @@ function register($username, $fn, $password) {
 	return array('message' => 'Registration successful for ' . $username, 'DBresponse' => $output);
 }
 
-// header('Content-Type: application/json');
-
-// Check if a "action" parameter is provided in the request
-/*
-if (isset($_GET['action'])) {
-    $action = $_GET['action'];
-
-    // Perform different actions based on the provided "action" parameter
-    switch ($action) {
-        case 'get_user':
-            if (isset($_GET['username']) && isset($_GET['password'])) {
-			$username = $_GET['username'];
-			$password = $_GET['password'];
-
-			// Process the GET request based on the provided username and password
-			$response = array('message' => "Hello, $username! Your hashed password is $password.");
-		} else {
-			// If either username or password parameter is missing
-			$response = array('error' => 'Both username and password parameters are required.');
-		}
-            break;
-
-        case 'create_user':
-            // Handle the "create_user" action
-            $username = isset($_POST['username']) ? $_POST['username'] : null;
-            $password = isset($_POST['password']) ? $_POST['password'] : null;
-            $response = createUser($username, $password);
-            break;
-
-        default:
-            // If the provided action is not recognized
-            $response = array('error' => 'Invalid action');
-            break;
-    }
-} else {
-    // If no "action" parameter is provided
-    $response = array('error' => 'Action parameter is missing');
-}
-
-// Output the response as JSON
-echo json_encode($response);
-
-// Example function to get user information
-
-
-// Example function to create a new user
-function createUser($username, $password) {
-    // Implement logic to create a new user based on $username and $password
-    // Return success message or an error message
-    return array('message' => 'User created successfully');
-}*/
 ?>
