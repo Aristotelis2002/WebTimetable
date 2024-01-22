@@ -494,24 +494,28 @@ document.addEventListener('DOMContentLoaded', function() {
 		var dataDiv = document.getElementById("tables");
 		var tables = dataDiv.querySelectorAll("table");
 		var finalCsv = "";
-
+		counter = 0;
 		for (var i = 0; i < tables.length; i++) {
 			var table = tables[i];
-			var caption = table.caption ? table.caption.innerText : '';
+			if (table.style.display !== 'none') {
+				var caption = table.caption ? table.caption.innerText : '';
+				// console.log(caption);
 
-			var csv = Papa.unparse(getTableData(table));
-			if (i == 0) {
-				finalCsv += caption + csv;
-			} else {
-				finalCsv += "\n" + caption + csv;
+				var csv = Papa.unparse(getTableData(table));
+				if (counter == 0) {
+					counter++;
+					finalCsv += caption + csv;
+				} else {
+					finalCsv += "\n" + caption + csv;
 
+				}
 			}
 		}
 		// Download CSV file
 		var blob = new Blob([finalCsv], { type: "text/csv;charset=utf-8" });
 		var link = document.createElement("a");
 		link.href = URL.createObjectURL(blob);
-		link.setAttribute("download", "schedule.csv");
+		link.setAttribute("download", "razpisanie.csv");
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);
@@ -519,9 +523,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	function getTableData(table) {
 		var data = [];
 		var rows = table.getElementsByTagName("tr");
-		
-			for (var i = 0; i < rows.length; i++) {
-				if (rows[i].style.display !== 'none') {
+
+		for (var i = 0; i < rows.length; i++) {
+			if (rows[i].style.display !== 'none') {
 				var rowData = [];
 				var cells = rows[i].getElementsByTagName("td");
 
