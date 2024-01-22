@@ -144,6 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					dropOldDataFromBase(); 
 					// dropInterestsFromBase(); ??
 					addPresentationsToBase(dictionary); 
+					console.log("adding to db successful");
 				}
 			};
 	
@@ -184,6 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			console.error('Fetch error:', error.message);
 		}
 	}
-	extractDataFromBase();
+	//extractDataFromBase();
 	window.handleFile = handleFile;
+	window.extractDataFromBase = extractDataFromBase;
 });

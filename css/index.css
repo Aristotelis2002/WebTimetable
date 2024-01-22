@@ -155,6 +155,7 @@ li.bottom {
 .dropdown {
 	width: 70%;
 	height: 100%;
+	display: block;
 	border-color: #444;
 	background-color: #444;
 	/*background-image: linear-gradient(-90deg, #A9A5A5, #E0896E);*/
@@ -170,10 +171,14 @@ li.bottom {
 	background-image: linear-gradient(-90deg, #59d0f5, #90b3be);
 }
 
+#fileInput {
+	display: none;
+}
+
 .menu {
 	border:none;
 	background-color: #333;
-	width: 100%;
+	width: 49%;
 	height: 100%;
 	color: #eee;
 	font-size: 2.6vh;
@@ -241,6 +246,12 @@ table {
   margin-top: 20px;
   margin-left: 0.5%;
   margin-right: 0.5%;
+}
+
+caption {
+	font-size: 3.5vh;
+	color: #eee;
+	margin-bottom: 1vh;
 }
 
 table tr td:nth-child(1) {

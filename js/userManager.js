@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	function logOut() {
 		sessionStorage.setItem('username', '');
 		sessionStorage.setItem('adminStatus', false);
-		
+		closeFilterFrom();
 		updateView();
 	}
 	
@@ -55,7 +55,6 @@ document.addEventListener('DOMContentLoaded', function() {
 				lastCell.style.display = hideLastColumn ? 'none' : '';
 			}
 		}
-		
 	}
 	
 	function logInForm() {
@@ -170,6 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			sessionStorage.setItem('username', '');
 		}
 		//load tables from db																		!!!
+		extractDataFromBase();
 		updateView();
 	}
 	

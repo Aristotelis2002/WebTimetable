@@ -3,13 +3,59 @@ document.addEventListener('DOMContentLoaded', function() {
 	const scheduleButton = document.getElementById('scheduleButton');
 	const fileInput = document.getElementById('fileInput');
 	const tableSelect = document.getElementById('tableSelect');
+	const filterButton = document.getElementById('filterButton');
+	const filterSubmitButton = document.getElementById('btn-submit-filters');
+	const filterClaerButton = document.getElementById('btn-clear-filters');
 		
 	function scheduleButtonHandler() {
+		closeFilterFrom();
 		if (sessionStorage.getItem('adminStatus') == 'true') {
 			fileInput.click();
 		} else {
 			
 		}
+	}
+	
+	function openFilterFrom() {
+		document.getElementById("filters").style.display = "block";
+	}
+	
+	function closeFilterFrom() {
+		document.getElementById("filters").style.display = "none";
+	}
+	
+	function filterTables() {
+		var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+		var rows = document.querySelectorAll('table tr');
+	
+		// Show/hide rows based on filtering
+		rows.forEach(function (row) {
+			const dropdownCell = row.cells[7];
+			const dropdown = dropdownCell.querySelector('.tableDropList');
+			
+			if (Array.from(checkboxes).every(function(checkbox) {
+				return !checkbox.checked;
+			})) {
+				row.style.display = '';
+			} else {
+				if (dropdown != null && dropdown.value != 0 && checkboxes[dropdown.value - 1].checked) {
+					row.style.display = '';
+				} else {
+					row.style.display = 'none';
+				}
+			}	
+		});
+		
+		closeFilterFrom();
+	}
+	
+	function clearFilters() {
+		var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+		checkboxes.forEach(function (checkbox) {
+			checkbox.checked = false;
+		});
+
+		filterTables();
 	}
 	
 	if (fileInput) {
@@ -20,7 +66,23 @@ document.addEventListener('DOMContentLoaded', function() {
 		scheduleButton.addEventListener('click', scheduleButtonHandler);
 	}
 	
+	if (filterButton) {
+		filterButton.addEventListener('click', openFilterFrom);
+	}
+	
+	if (filterSubmitButton) {
+		filterSubmitButton.addEventListener('click', filterTables);
+	}
+	
+	if (filterClaerButton) {
+		filterClaerButton.addEventListener('click', clearFilters);
+	}
+	
 	if (tableSelect) {
+		tableSelect.addEventListener('click',  function() {
+			closeFilterFrom();
+		});
+		
 		tableSelect.addEventListener('change',  function() {
 			
 		if (tableSelect.value == "all") {
@@ -47,7 +109,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		for (var key in dictionary) {
 			if (dictionary.hasOwnProperty(key)) {
 				var tableId = "table" + key;
-				// console.log(tableId);
 				
 				createTable(tableId);
 				
@@ -62,6 +123,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function createTable(tableId) {
         const table = document.createElement('table');
         table.id = tableId;
+		
+		var newCaption = document.createElement('caption');
+  
+		newCaption.textContent = "Ден " + (tables.length + 1) + " - " + tableId.substring(5);
 
         // Create the header row
         const headerRow = document.createElement("tr");
@@ -71,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		const time = document.createElement("th");
         time.textContent = 'Час';
 		const fn = document.createElement("th");
-        fn.textContent = "Ден " + (tables.length + 1) + " - " + tableId.substring(5);
+        fn.textContent = 'Факлутетен номер';
 		const group = document.createElement("th");
         group.textContent = 'Група';
 		const name = document.createElement("th");
@@ -92,6 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		headerRow.appendChild(theme);
 		headerRow.appendChild(interest);
 		
+		table.appendChild(newCaption);
 		table.appendChild(headerRow);
 	
         document.getElementById("tables").appendChild(table);
@@ -100,11 +166,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		var selectElement = document.getElementById('tableSelect');
 		var optionElement = document.createElement('option');
         optionElement.value = tableId; // Adjust the value as needed
-        optionElement.textContent = fn.textContent;
+        optionElement.textContent = "Ден " + (tables.length) + " - " + tableId.substring(5);
         selectElement.appendChild(optionElement);
 	 }
-	
-	// TODO when parsing rdy change addRow
 	
 	function addRow(tableID, row) {
 		const table = document.getElementById(tableID);
@@ -113,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			console.error(`Table with ID ${tableID} not found.`);
 			return;
 		}
-		// Ще се променят имената и параметрите на функцията според това какво е удобно за подаване
+
 		const newRow = document.createElement("tr");
 		
 		const id = document.createElement("td");
@@ -147,6 +211,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			const nothing = document.createElement("option");
 			nothing.value = 0;
 			nothing.text = '';
+			nothing.selected = true;
 			dropdown.appendChild(nothing);
 			const must = document.createElement("option");
 			must.value = 1;
@@ -164,6 +229,35 @@ document.addEventListener('DOMContentLoaded', function() {
 			might.value = 4;
 			might.text = 'Може да е интересно';
 			dropdown.appendChild(might);
+			
+			dropdown.addEventListener('change', function(event) {
+				var selectedValue = dropdown.value;
+				var row = dropdown.closest('tr');
+				var cells = row.getElementsByTagName('td');
+				
+				getPresentationIdByFN(cells[2].textContent)
+				.then(presentationId => {
+					console.log(presentationId);
+				
+					getIdByUsername(sessionStorage.getItem('username'))
+					.then(currentUserId => {
+						console.log(currentUserId);
+				
+						addInterestToDB(currentUserId, presentationId, selectedValue);
+					})
+					.catch(error => {
+						console.error(error);
+					});
+				
+					// You might consider checking for !='' here
+				
+				})
+				.catch(error => {
+					console.error(error);
+				});//ne znam kak da vzema fn ot tablicata
+				
+				
+			});
 		
 			interest.appendChild(dropdown);
 		}
@@ -206,6 +300,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			console.warn(`Table with ID ${tableId} not found.`);
 		}
 	}
+	
+	//TODO TO BE DELETED   v v v																	!!!!!!!
 	
 	function getDropdownValues(tableID) {
 	// Find the table element by ID
@@ -272,7 +368,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			const data = await response.json(); //json data has an error or id field
 			if (data.error == null) {
 				// getId successful
-				console.log(data.id);
+				//console.log(data.id);
 				return data.id;
 			} else {
 				// getId failed
@@ -301,7 +397,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			const data = await response.json(); //json data has an error or userId field
 			if (data.error == null) {
 				// getId successful
-				console.log(data.userId);
+				//console.log(data.userId);
 				return data.userId;
 			} else {
 				// getId failed
@@ -405,17 +501,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	}
 	// getPresntationInfoById(33);
-	// Край на дефинициите
-	var selects = document.querySelectorAll('.tableDropList');
-
-    selects.forEach(function(select) {
-      select.addEventListener('change', function() {
-        //send to db
-		// var presenetationId = getPresentationIdByFN(fn) //ne znam kak da vzema fn ot tablicata
-		// var currentUserId = getIdByUsername(sessionStorage.getItem('username')); //moje bi proverka za !=''
-		// addInterestToDB(currentUserId, presentationId, "Трябва да отида"); // не знам как да взема интерес текста от таблицата
-      });
-    });
+	// Край на дефинициите	
 	
 	window.tables = tables;
 	window.createTable = createTable;
@@ -423,4 +509,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	window.removeTable = removeTable;
 	window.clearDropdownValues = clearDropdownValues;
 	window.loadTables = loadTables;
+	window.closeFilterFrom = closeFilterFrom;
+	window.getAllInterests = getAllInterests;
+	window.getPresntationInfoById = getPresntationInfoById;
+	
 });
