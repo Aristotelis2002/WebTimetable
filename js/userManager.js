@@ -220,12 +220,11 @@ document.addEventListener('DOMContentLoaded', function() {
 		//load tables from db																		!!!
 		extractDataFromBase();
 		//load interests from db
-		
+		getAdminStatus("user1").then(res => console.log(res));
 		
 		updateView();
 	}
 	
-	// Da se premesti funkciqta
 	async function getAdminStatus(username) {
 		try {
 			const response = await fetch('http://localhost/demo/api.php', {
@@ -240,12 +239,11 @@ document.addEventListener('DOMContentLoaded', function() {
 				throw new Error(`HTTP error! Status: ${response.status}`);
 			}
 
-			const data = await response.json(); //json data has an error, message, adminStatus
-			var errorLabel = document.getElementById("errorMessageLogIn");
-			console.log(data);
+			const data = await response.json(); //json data has an error, adminStatus
+			//var errorLabel = document.getElementById("errorMessageLogIn");
+			//console.log(data);
 			if (data.error == null) {
-				
-				if (data.adminStatus.admin == 0) {
+				if (data.adminStatus == 0) {
 					return false;
 				} else {
 					return true;
