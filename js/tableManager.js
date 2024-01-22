@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (sessionStorage.getItem('adminStatus') == 'true') {
 			fileInput.click();
 		} else {
-			//generate
+			exportToPdf();
 		}
 	}
 	
@@ -30,6 +30,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 		// Show/hide rows based on filtering
 		rows.forEach(function (row) {
+			if (row.cells[0].tagName.toLowerCase() == "th") {
+				return;
+			}
+			
 			const dropdownCell = row.cells[7];
 			const dropdown = dropdownCell.querySelector('.tableDropList');
 			
@@ -142,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		const name = document.createElement("th");
         name.textContent = 'Име Фамилия';
 		const themeNumber = document.createElement("th");
-        themeNumber.textContent = 'Номер на тема';
+        themeNumber.textContent = '№ Тема';
 		const theme = document.createElement("th");
         theme.textContent = 'Тема';
 		const interest = document.createElement("th");
@@ -237,11 +241,9 @@ document.addEventListener('DOMContentLoaded', function() {
 				
 				getPresentationIdByFN(cells[2].textContent)
 				.then(presentationId => {
-					console.log(presentationId);
 				
 					getIdByUsername(sessionStorage.getItem('username'))
 					.then(currentUserId => {
-						console.log(currentUserId);
 				
 						addInterestToDB(currentUserId, presentationId, selectedValue);
 					})
@@ -399,7 +401,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			const data = await response.json(); //json data has an error or userId field
 			if (data.error == null) {
 				// getId successful
-				//console.log(data.userId);
 				return data.userId;
 			} else {
 				// getId failed
@@ -493,11 +494,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				return parsedData;
 				// loadTables(parsedData);
 			} else {
-				// normalno e da vurne erro pri prazna tablica.
-				alert(data.error ); //vmesto tozi alert нещо друго
-				
-				// TODO
-				// Зари, смени този алерт с каквото искаш
+				//clearDropdownValues();
 			}
 	
 		} catch (error) {
@@ -536,6 +533,27 @@ document.addEventListener('DOMContentLoaded', function() {
 	// getPresntationInfoById(33);
 	// Край на дефинициите	
 	
+	async function exportToPdf() {
+		const element = document.getElementById('tables');
+		toggleLastColumnVisibility(true);
+		
+		//FORMAT TABLES!!!!!!!!!!!!!!!!!!
+		
+		const captionElements = document.getElementsByTagName('caption');
+		for (let i = 0; i < captionElements.length ; i++) {
+			captionElements[i].style.color = "#000";
+		}
+		
+		// Use html2pdf library to export the div content to PDF
+		await html2pdf(element);
+		
+		//DEFORMAT TABLES!!!!!!!!!!!!!!!!
+		toggleLastColumnVisibility(false);
+		for(let i = 0; i < captionElements.length ; i++) {
+			captionElements[i].style.color = "#eee";
+		}
+	}
+	
 	window.tables = tables;
 	window.createTable = createTable;
 	window.addRow = addRow;
@@ -543,38 +561,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	window.clearDropdownValues = clearDropdownValues;
 	window.loadTables = loadTables;
 	window.closeFilterFrom = closeFilterFrom;
-	window.getAllInterests = getAllInterests;
-	window.getPresntationInfoById = getPresntationInfoById;
-	
-	// Da se premesti funkciqta
-	async function getAdminStatus(username) {
-		try {
-			const response = await fetch('http://localhost/demo/api.php', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
-				body: `action=${encodeURIComponent('get_admin_status')}&username=${encodeURIComponent(username)}`,
-			});
-
-			if (!response.ok) {
-				throw new Error(`HTTP error! Status: ${response.status}`);
-			}
-
-			const data = await response.json(); //json data has an error, message, adminStatus
-			var errorLabel = document.getElementById("errorMessageLogIn");
-			if (data.error == null) {
-				if (data.adminStatus.admin == 0) {
-					return false;
-				} else {
-					return true;
-				}
-			} else {
-				console.log("The error message is " + data.error);
-			}
-
-		} catch (error) {
-			console.error('Fetch error:', error.message);
-		}
-	}
+	window.getUserInterests = getUserInterests;
+	window.getIdByUsername = getIdByUsername;
 });

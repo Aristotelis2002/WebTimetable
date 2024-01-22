@@ -100,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			console.error('Fetch error:', error.message);
 		}
 	}
+	
 	async function dropInterestsFromBase() {
 		try {
 			const response = await fetch('http://localhost/demo/api.php', {

@@ -192,6 +192,19 @@ li.bottom {
 	color: #000;
 }
 
+#scheduleButton:hover {
+	background-image: linear-gradient(-90deg, #D0917E, #F77C57);
+	color: #000;
+}
+#scheduleButton.hovered:hover {
+	background-image: linear-gradient(-90deg, #A9A6A5, #F77C57);
+	color: #000;
+}
+
+#filterButton:hover {
+	background-image: linear-gradient(-90deg, #A9A6A5, #D0917E);
+	color: #000;
+}
 
 h1 {
 	text-align: center;
@@ -247,6 +260,7 @@ table {
   margin-top: 20px;
   margin-left: 0.5%;
   margin-right: 0.5%;
+  page-break-inside: avoid;
 }
 
 caption {
@@ -271,7 +285,7 @@ table tr td:nth-child(5) {
   width: 20%;
 }
 table tr td:nth-child(6) {
-  width: 8%;
+  width: 5%;
 }
 table tr td:nth-child(8) {
   width: 15%;

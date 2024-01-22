@@ -2,7 +2,14 @@ document.addEventListener('DOMContentLoaded', function() {
 	const logOutButton = document.getElementById("logOut-button");
 	
 	function updateView() {
+		//const adminStat = getAdminStatus(sessionStorage.getItem('username'));
+		//if (adminStat != sessionStorage.getItem('adminStatus')) {
+		//	sessionStorage.setItem('adminStatus', adminStat);
+		//}
+		
 		if (sessionStorage.getItem('username') != '') {
+			clearDropdownValues();
+			
 			document.getElementById("form-button").style.display = "none";
 			document.getElementById("logOut-button").style.display = "block";
 			document.getElementById("contentMenu").style.display = "block";
@@ -13,16 +20,19 @@ document.addEventListener('DOMContentLoaded', function() {
 			document.getElementById("filterButton").style.display = "";
 			document.getElementById("scheduleButton").style.width = "50%";
 			document.getElementById("scheduleButton").textContent = "Генериране на разписание";
+			document.getElementById("scheduleButton").classList.remove('hovered');
 			toggleLastColumnVisibility(false);
 			if (sessionStorage.getItem('adminStatus') == 'true') {
 				document.getElementById("usernameTitle").style.color = '#f9d87b';
 				document.getElementById("scheduleButton").textContent = "Качване на разписание";
 				document.getElementById("filterButton").style.display = "none";
 				document.getElementById("scheduleButton").style.width = "100%";
+				document.getElementById("scheduleButton").classList.add('hovered');
 				toggleLastColumnVisibility(true);
+			} else {
+				updateInterests();
 			}
 		} else {
-			console.log(sessionStorage.getItem('username'));
 			document.getElementById("logOut-button").style.display = "none";
 			document.getElementById("form-button").style.display = "block";
 			document.getElementById("usernameTitle").textContent = '';
@@ -67,10 +77,43 @@ document.addEventListener('DOMContentLoaded', function() {
 		var password = document.getElementById("password").value;
 		sha256Hash(password).then(hashedPass => {
 			loginUser(username, hashedPass);
-			clearDropdownValues();
-			// TODO load interests																!!!
+
+		
+			
 		}).catch(error => {
 			console.error('Error with sha256:', error);
+		});
+	}
+	
+	function updateInterests() {
+		getIdByUsername(sessionStorage.getItem('username')).then(userId => {
+			getUserInterests(userId).then(interests => {
+				interests.forEach(function(presentation) {		
+					for(let i = 0; i < tables.length; i++) {
+						const table = document.getElementById(tables[i]);
+					
+						if (!table) {
+							console.error(`Table with ID ${tableID} not found.`);
+							return;
+						}
+						
+						// Iterate through rows in the table
+						for (let i = 1; i < table.rows.length; i++) {
+							const row = table.rows[i];
+							// Get the second cell (index 1) which contains the dropdown
+							const fn = row.cells[2].textContent;
+						
+							if (fn == presentation.fn) {
+								const dropdown = row.cells[7].querySelector('.tableDropList');
+								// Retrieve the selected value of the dropdown
+								if (dropdown != null) {
+									dropdown.value = presentation.interestType;
+								}
+							}
+						}
+					}
+				})
+			})
 		});
 	}
 
@@ -111,6 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				}
 				closeSignInForm();
 				errorLabel.style.display = "none";
+				
 				updateView();
 			} else {
 				// Login failed
@@ -181,8 +225,43 @@ document.addEventListener('DOMContentLoaded', function() {
 		updateView();
 	}
 	
+	// Da se premesti funkciqta
+	async function getAdminStatus(username) {
+		try {
+			const response = await fetch('http://localhost/demo/api.php', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: `action=${encodeURIComponent('get_admin_status')}&username=${encodeURIComponent(username)}`,
+			});
+
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+
+			const data = await response.json(); //json data has an error, message, adminStatus
+			var errorLabel = document.getElementById("errorMessageLogIn");
+			console.log(data);
+			if (data.error == null) {
+				
+				if (data.adminStatus.admin == 0) {
+					return false;
+				} else {
+					return true;
+				}
+			} else {
+				console.log("The error message is " + data.error);
+			}
+
+		} catch (error) {
+			console.error('Fetch error:', error.message);
+		}
+	}
+	
 	window.onload = initialization();
 	window.updateView = updateView;
 	window.register = register;
 	window.logInForm = logInForm;
+	window.toggleLastColumnVisibility = toggleLastColumnVisibility;
 });
