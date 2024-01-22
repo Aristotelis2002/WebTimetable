@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (sessionStorage.getItem('adminStatus') == 'true') {
 			fileInput.click();
 		} else {
-			
+			//generate
 		}
 	}
 	
@@ -345,7 +345,9 @@ document.addEventListener('DOMContentLoaded', function() {
 				// Check if the cell contains a dropdown with the specified class
 				const dropdown = dropdownCell.querySelector('.tableDropList');
 				// Retrieve the selected value of the dropdown
-				dropdown.value = 0;
+				if (dropdown != null) {
+					dropdown.value = 0;
+				}
 			}
 		}
 	}
@@ -456,7 +458,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			if (data.error == null) {
 				// getting data from JSON response
 				let parsedData = JSON.parse(data);
-				console.log(parsedData);
+				return parsedData;
 				// loadTables(parsedData);
 			} else {
 				// normalno e da vurne erro pri prazna tablica.
