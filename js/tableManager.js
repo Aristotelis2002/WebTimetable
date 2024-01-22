@@ -489,7 +489,52 @@ document.addEventListener('DOMContentLoaded', function() {
 			captionElements[i].style.color = "#eee";
 		}
 	}
-	
+
+	function exportToCSV() {
+		var dataDiv = document.getElementById("tables");
+		var tables = dataDiv.querySelectorAll("table");
+		var finalCsv = "";
+
+		for (var i = 0; i < tables.length; i++) {
+			var table = tables[i];
+			var caption = table.caption ? table.caption.innerText : '';
+
+			var csv = Papa.unparse(getTableData(table));
+			if (i == 0) {
+				finalCsv += caption + csv;
+			} else {
+				finalCsv += "\n" + caption + csv;
+
+			}
+		}
+		// Download CSV file
+		var blob = new Blob([finalCsv], { type: "text/csv;charset=utf-8" });
+		var link = document.createElement("a");
+		link.href = URL.createObjectURL(blob);
+		link.setAttribute("download", "schedule.csv");
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+	}
+	function getTableData(table) {
+		var data = [];
+		var rows = table.getElementsByTagName("tr");
+		
+			for (var i = 0; i < rows.length; i++) {
+				if (rows[i].style.display !== 'none') {
+				var rowData = [];
+				var cells = rows[i].getElementsByTagName("td");
+
+				for (var j = 0; j < cells.length - 1; j++) {
+					rowData.push(cells[j].innerText);
+				}
+
+				data.push(rowData);
+			}
+		}
+
+		return data;
+	}
 	window.tables = tables;
 	window.createTable = createTable;
 	window.addRow = addRow;
