@@ -54,9 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	function parseCSV(csv) {
 		var lines = csv.split("\n");
 		startOfImportantRows = getIndexFirstImportantRow(lines)
-		// console.log("Days:");
 		days = getDays(lines);
-		// console.log(days); //logging
 		dictionary = {};
 		days.forEach(function (element) {
 			dictionary[element] = [];
@@ -67,13 +65,11 @@ document.addEventListener('DOMContentLoaded', function() {
 			var indexesOfPresentationIDs = getIndexOfIDs(currentLine);
 			if (indexesOfPresentationIDs.length > 0) {
 				var presentationsObjects = getAllObjectsFromRow(currentLine, indexesOfPresentationIDs);
-				// console.log(presentationsObjects);
 				for (let j = 0; j < days.length; j++) {
 					dictionary[days[j]].push(presentationsObjects[j]);
 				}
 			}
 		}
-		// console.log(dictionary); //logging
 		return dictionary;
 	}
 	async function dropOldDataFromBase() {

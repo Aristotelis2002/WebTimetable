@@ -1,12 +1,4 @@
 <?php
-/*$conn = new PDO('mysql:host=localhost;dbname=webproject', 'root', '');
-$sql = "SELECT * FROM users";
-$query = $conn->query($sql) or die("failed!");
-while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
- echo $row['username'] . "\n";
-}*/
-?>
-<?php
 
 class Db
 {
@@ -22,11 +14,6 @@ class Db
         $this->dbName = "webproject";
 
         $this->connection = new PDO("mysql:host=$dbhost;dbname=$this->dbName", $userName, $userPassword);
-          /*  [
-                PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            ]);
-			*/
         $this->tableName = $tableName;
     }
 
@@ -48,11 +35,9 @@ function convertDateFormatToSQL($inputDate) {
 	 $date = DateTime::createFromFormat('d.m.Y', $inputDate);
     
     if ($date) {
-        // Convert the date to the desired format
         $outputDate = $date->format('Y-m-d');
         return $outputDate;
     } else {
-        // Invalid input date format
         return "Invalid date format. Please use DD.MM.YYYY.";
     }
 }
@@ -61,11 +46,9 @@ function convertSQLDateFormatToJS($inputDate) {
 	 $date = DateTime::createFromFormat('Y-m-d', $inputDate);
      
     if ($date) {
-        // Convert the date to the desired format
         $outputDate = $date->format('d.m.Y');
         return $outputDate;
     } else {
-        // Invalid input date format
         return "Invalid date format";
     }
 }
@@ -129,7 +112,7 @@ function addUserToDB($username, $fn, $password){
 	$password = $db->escapeString($password);
 	$sql = "INSERT INTO `users` (`userId`, `fn`, `username`, `password`, `admin`) VALUES (NULL, '$fn', '$username', '$password', '0')";
 	$result = $db->query($sql);
-	return  $result->fetch(PDO::FETCH_ASSOC); // maybe error causing
+	return  $result->fetch(PDO::FETCH_ASSOC); 
 }
 
 function addPresentationToDB($orderId, $date, $hour, $fn , $groupStudent, $name, $topicId, $topic){
@@ -140,7 +123,7 @@ function addPresentationToDB($orderId, $date, $hour, $fn , $groupStudent, $name,
 	$topic = $db->escapeString($topic);
 	$sql = "INSERT INTO `presentations` (`id`, `orderId`, `date`, `hour`, `fn`, `groupStudent`, `name`, `topicId`, `topic`) VALUES (NULL, '$orderId', '$date', '$hour', '$fn' , '$groupStudent' , '$name' , '$topicId', '$topic')";
 	$result = $db->query($sql);
-	return  $result->fetch(PDO::FETCH_ASSOC); // maybe error causing
+	return  $result->fetch(PDO::FETCH_ASSOC); 
 }
 
 function getAllPresentations(){
@@ -231,7 +214,6 @@ function getPresentationId($fn) {
 function addInterestToDb($userId, $presentationId, $interestString) {
 	$db = new Db('interests'); 
 	$interestString = $db->escapeString($interestString);
-	//$sql = "INSERT INTO `interests` (`id`, `userId`, `presentationId`, `interestType`) VALUES (NULL, '$userId', '$presentationId', '$interestString')";
 	$sql = "UPDATE `interests` SET `interestType` = '$interestString' WHERE `userId` = '$userId' AND `presentationId` = '$presentationId'";
 	$sql2 = "INSERT INTO `interests` (`id`, `userId`, `presentationId`, `interestType`) SELECT NULL, '$userId', '$presentationId', '$interestString' WHERE ROW_COUNT() = 0";
 	$result = $db->query($sql);
