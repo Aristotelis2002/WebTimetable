@@ -10,11 +10,15 @@ document.addEventListener('DOMContentLoaded', function() {
 			document.getElementById("usernameTitle").style.color = '#eee';
 			document.getElementById("title-video").style.display = "none";
 			document.getElementById("title-image").style.display = "block";
+			document.getElementById("filterButton").style.display = "";
+			document.getElementById("scheduleButton").style.width = "50%";
 			document.getElementById("scheduleButton").textContent = "Генериране на разписание";
 			toggleLastColumnVisibility(false);
 			if (sessionStorage.getItem('adminStatus') == 'true') {
 				document.getElementById("usernameTitle").style.color = '#f9d87b';
 				document.getElementById("scheduleButton").textContent = "Качване на разписание";
+				document.getElementById("filterButton").style.display = "none";
+				document.getElementById("scheduleButton").style.width = "100%";
 				toggleLastColumnVisibility(true);
 			}
 		} else {
@@ -26,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			document.getElementById("title-image").style.display = "none";
 			document.getElementById("title-video").style.display = "block";
 			document.getElementById('tableSelect').value = "all";
+			document.getElementById("filterButton").style.display = "none";
 			for(let i = 0; i < tables.length; i++) {
 				var table = document.getElementById(tables[i]).style.display = "";
 			}
@@ -36,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	function logOut() {
 		sessionStorage.setItem('username', '');
 		sessionStorage.setItem('adminStatus', false);
-		closeFilterFrom();
+		document.getElementById("btn-clear-filters").click();
 		updateView();
 	}
 	
@@ -170,6 +175,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 		//load tables from db																		!!!
 		extractDataFromBase();
+		//load interests from db
+		
+		
 		updateView();
 	}
 	

@@ -192,6 +192,7 @@ li.bottom {
 	color: #000;
 }
 
+
 h1 {
 	text-align: center;
 	color: #22222F;
@@ -380,13 +381,36 @@ form #btn-submit, #btn-register, #btn-register-reroute {
 }
 
 /* Add a green background color to the register button */
-form #btn-register, #btn-register-reroute {
+form #btn-register, #btn-register-reroute, #btn-submit-filters {
    background-image: linear-gradient(#5ad6fc, #0abaf0);
 }
 
 /* Add a red background color to the cancel button */
-form #btn-cancel-signIn, #btn-cancel-reg {
+form #btn-cancel-signIn, #btn-cancel-reg, #btn-clear-filters {
    background-image: linear-gradient(#f98967, #f5450f);
+}
+
+label.filters {
+  display: block;
+  padding-bottom: 2vh; 
+  padding-top: 2vh;
+  font-size: 3vh;
+  border-top-color: #5ad6fc;
+  border-top-width: 0.2vh;
+  border-top-style: solid;
+}
+
+/* Style the checkboxes */
+label.filters input[type="checkbox"] {
+  float: right;
+  width: 20%;
+  border-color: #00f;
+}
+
+/* Add some styling for when checkboxes are checked */
+label.filters input[type="checkbox"]:checked {
+  color: #00f; /* Change text color when checked */
+  background-color: #007bff; /* Change background color when checked */
 }
 
 /* Add some hover effects to buttons */
