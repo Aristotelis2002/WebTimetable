@@ -224,9 +224,14 @@ function getPresentationId($fn) {
 function addInterestToDb($userId, $presentationId, $interestString) {
 	$db = new Db('interests'); 
 	$interestString = $db->escapeString($interestString);
-	$sql = "INSERT INTO `interests` (`id`, `userId`, `presentationId`, `interestType`) VALUES (NULL, '$userId', '$presentationId', '$interestString')";
+	//$sql = "INSERT INTO `interests` (`id`, `userId`, `presentationId`, `interestType`) VALUES (NULL, '$userId', '$presentationId', '$interestString')";
+	$sql = "UPDATE `interests` SET `interestType` = '$interestString' WHERE `userId` = '$userId' AND `presentationId` = '$presentationId'";
+	$sql2 = "INSERT INTO `interests` (`id`, `userId`, `presentationId`, `interestType`) SELECT NULL, '$userId', '$presentationId', '$interestString' WHERE ROW_COUNT() = 0";
 	$result = $db->query($sql);
-	return  $result->fetch(PDO::FETCH_ASSOC);
+	$result->fetch(PDO::FETCH_ASSOC);
+	$result2 = $db->query($sql2);
+	$result2->fetch(PDO::FETCH_ASSOC);
+	return  $result2;
 }
 
 function getAllInterests(){
