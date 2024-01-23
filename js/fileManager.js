@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				let parsedData = JSON.parse(data);
 				loadTables(parsedData);
 			} else {
-				alert("No data base available to load\n Error msg: " + data.error);
+				// alert("No data base available to load\n Error msg: " + data.error);
 
 				// TODO
 				// сменим този алерт с каквото искаш
