@@ -2,10 +2,14 @@ document.addEventListener('DOMContentLoaded', function() {
 	const logOutButton = document.getElementById("logOut-button");
 	
 	function updateView() {
-		//const adminStat = getAdminStatus(sessionStorage.getItem('username'));
-		//if (adminStat != sessionStorage.getItem('adminStatus')) {
-		//	sessionStorage.setItem('adminStatus', adminStat);
-		//}
+		getAdminStatus(sessionStorage.getItem('username')).then(adminStat => {
+			console.log(adminStat);
+			console.log(sessionStorage.getItem('adminStatus'));
+			if (adminStat != sessionStorage.getItem('adminStatus')) {
+				sessionStorage.setItem('adminStatus', adminStat);
+			}
+		});
+		
 		
 		if (sessionStorage.getItem('username') != '') {
 			clearDropdownValues();
@@ -88,7 +92,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	function updateInterests() {
 		getIdByUsername(sessionStorage.getItem('username')).then(userId => {
 			getUserInterests(userId).then(interests => {
-				interests.forEach(function(presentation) {		
+				if (interests == null) {
+						return;
+					}
+				interests.forEach(function(presentation) {
 					for(let i = 0; i < tables.length; i++) {
 						const table = document.getElementById(tables[i]);
 					
@@ -243,7 +250,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			//var errorLabel = document.getElementById("errorMessageLogIn");
 			//console.log(data);
 			if (data.error == null) {
-				if (data.adminStatus == 0) {
+				console.log(data.adminStatus);
+				if (data.adminStatus.admin == 0) {
 					return false;
 				} else {
 					return true;
