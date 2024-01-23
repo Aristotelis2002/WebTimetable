@@ -4,13 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/index.css">
-  <script src="js/html2pdf.js"></script>
   <script src="js/papaparse.min.js"></script>
+  <script src="js/html2pdf.js"></script>
   <script src="js/fileManager.js"></script>
   <script src="js/tableManager.js"></script>
   <script src="js/userManager.js"></script>
   <script src="js/form.js"></script>
-  
   
   <title>Разписание за реферати</title>
 </head>
@@ -86,6 +85,12 @@
 		
 			<button type="button" id="btn-submit-filters">Филтрирай</button>
 			<button type="button" id="btn-clear-filters">Изчисти филтрите</button>
+		</form>
+
+		<form id="export">
+			<h1>Експорт</h1>
+			<button type="button" id="btn-export-csv">Експорт към csv</button>
+			<button type="button" id="btn-export-pdf">Експорт към pdf</button>
 		</form>		
 				
 		<nav id='contentMenu'>

@@ -6,14 +6,24 @@ document.addEventListener('DOMContentLoaded', function() {
 	const filterButton = document.getElementById('filterButton');
 	const filterSubmitButton = document.getElementById('btn-submit-filters');
 	const filterClaerButton = document.getElementById('btn-clear-filters');
+	const exportCsv = document.getElementById('btn-export-csv');
+	const exportPdf = document.getElementById('btn-export-pdf');
 		
 	function scheduleButtonHandler() {
 		closeFilterFrom();
 		if (sessionStorage.getItem('adminStatus') == 'true') {
 			fileInput.click();
 		} else {
-			exportToPdf();
+			document.getElementById('export').style.display = "block";
 		}
+	}
+	
+	if (exportCsv) {
+		exportCsv.addEventListener('click', exportToCSV);
+	}
+	
+	if (exportPdf) {
+		exportPdf.addEventListener('click', exportToPdf);
 	}
 	
 	function openFilterFrom() {
@@ -488,6 +498,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		for(let i = 0; i < captionElements.length ; i++) {
 			captionElements[i].style.color = "#eee";
 		}
+		document.getElementById('export').style.display = "none";
 	}
 
 	function exportToCSV() {
@@ -495,6 +506,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		var tables = dataDiv.querySelectorAll("table");
 		var finalCsv = "";
 		counter = 0;
+		console.log("vliza");
 		for (var i = 0; i < tables.length; i++) {
 			var table = tables[i];
 			if (table.style.display !== 'none') {
@@ -519,6 +531,8 @@ document.addEventListener('DOMContentLoaded', function() {
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);
+		
+		document.getElementById('export').style.display = "none";
 	}
 	function getTableData(table) {
 		var data = [];
