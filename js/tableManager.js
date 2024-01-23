@@ -14,7 +14,11 @@ document.addEventListener('DOMContentLoaded', function () {
 		if (sessionStorage.getItem('adminStatus') == 'true') {
 			fileInput.click();
 		} else {
-			openExportFrom();
+			if(document.getElementById("export").style.display == "block") {
+                closeExportFrom();
+            } else {
+                openExportFrom();
+            }
 		}
 	}
 
