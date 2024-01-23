@@ -1,24 +1,23 @@
 <?php
-
+require_once "helpers.php";
 class Db
 {
     private $connection;
     private $tableName;
     private $dbName;
 
-    public function __construct($tableName)
-    {
-        $dbhost = "localhost";
-        $userName = "root";
-        $userPassword = "";
-        $this->dbName = "webproject";
+    public function __construct($tableName) {
+		$dbConnection = config("db_connection");
+        $dbhost = config("db_host");
+        $userName = config("db_username");
+        $userPassword = config("db_password");
+        $this->dbName = config("db_database");
 
-        $this->connection = new PDO("mysql:host=$dbhost;dbname=$this->dbName", $userName, $userPassword);
+        $this->connection = new PDO("$dbConnection:host=$dbhost;dbname=$this->dbName", $userName, $userPassword);
         $this->tableName = $tableName;
     }
 
-    public function getConnection()
-    {
+    public function getConnection() {
         return $this->connection;
     }
 	public function escapeString($input) {
@@ -28,6 +27,15 @@ class Db
 		$stmt = $this->connection->prepare($sql);
 		$stmt->execute();
 		return $stmt;
+	}
+	public function getInitConnection() {
+		$dbConnection = config("db_connection");
+        $dbhost = config("db_host");
+        $userName = config("db_username");
+        $userPassword = config("db_password");
+		$dbInitName = config("db_init_database");
+
+		return new PDO("$dbConnection:host=$dbhost;dbname=$dbInitName", $userName, $userPassword);
 	}
 }
 
