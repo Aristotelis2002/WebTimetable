@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 	const tables = [];
 	const scheduleButton = document.getElementById('scheduleButton');
 	const fileInput = document.getElementById('fileInput');
@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	const filterClaerButton = document.getElementById('btn-clear-filters');
 	const exportCsv = document.getElementById('btn-export-csv');
 	const exportPdf = document.getElementById('btn-export-pdf');
-		
+
 	function scheduleButtonHandler() {
 		closeFilterFrom();
 		if (sessionStorage.getItem('adminStatus') == 'true') {
@@ -17,46 +17,46 @@ document.addEventListener('DOMContentLoaded', function() {
 			openExportFrom();
 		}
 	}
-	
+
 	if (exportCsv) {
 		exportCsv.addEventListener('click', exportToCSV);
 	}
-	
+
 	if (exportPdf) {
 		exportPdf.addEventListener('click', exportToPdf);
 	}
-	
+
 	function openExportFrom() {
 		document.getElementById("export").style.display = "block";
 	}
-	
+
 	function closeExportFrom() {
 		document.getElementById("export").style.display = "none";
 	}
-	
+
 	function openFilterFrom() {
 		closeExportFrom();
 		document.getElementById("filters").style.display = "block";
 	}
-	
+
 	function closeFilterFrom() {
 		document.getElementById("filters").style.display = "none";
 	}
-	
+
 	function filterTables() {
 		var checkboxes = document.querySelectorAll('input[type="checkbox"]');
 		var rows = document.querySelectorAll('table tr');
-	
+
 		// Show/hide rows based on filtering
 		rows.forEach(function (row) {
 			if (row.cells[0].tagName.toLowerCase() == "th") {
 				return;
 			}
-			
+
 			const dropdownCell = row.cells[7];
 			const dropdown = dropdownCell.querySelector('.tableDropList');
-			
-			if (Array.from(checkboxes).every(function(checkbox) {
+
+			if (Array.from(checkboxes).every(function (checkbox) {
 				return !checkbox.checked;
 			})) {
 				row.style.display = '';
@@ -66,12 +66,12 @@ document.addEventListener('DOMContentLoaded', function() {
 				} else {
 					row.style.display = 'none';
 				}
-			}	
+			}
 		});
-		
+
 		closeFilterFrom();
 	}
-	
+
 	function clearFilters() {
 		var checkboxes = document.querySelectorAll('input[type="checkbox"]');
 		checkboxes.forEach(function (checkbox) {
@@ -80,99 +80,99 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		filterTables();
 	}
-	
+
 	if (fileInput) {
 		fileInput.addEventListener('change', handleFile);
 	}
-	
+
 	if (scheduleButton) {
 		scheduleButton.addEventListener('click', scheduleButtonHandler);
 	}
-	
+
 	if (filterButton) {
 		filterButton.addEventListener('click', openFilterFrom);
 	}
-	
+
 	if (filterSubmitButton) {
 		filterSubmitButton.addEventListener('click', filterTables);
 	}
-	
+
 	if (filterClaerButton) {
 		filterClaerButton.addEventListener('click', clearFilters);
 	}
-	
+
 	if (tableSelect) {
-		tableSelect.addEventListener('click',  function() {
+		tableSelect.addEventListener('click', function () {
 			closeFilterFrom();
 			closeExportFrom();
 		});
-		
-		tableSelect.addEventListener('change',  function() {
-			
-		if (tableSelect.value == "all") {
-			for(let i = 0; i < tables.length; i++) {
-				var table = document.getElementById(tables[i]).style.display = "";
-			}
-		} else {
-			for(let i = 0; i < tables.length; i++) {
-				if (tableSelect.value == tables[i]) {
+
+		tableSelect.addEventListener('change', function () {
+
+			if (tableSelect.value == "all") {
+				for (let i = 0; i < tables.length; i++) {
 					var table = document.getElementById(tables[i]).style.display = "";
-				} else {
-					var table = document.getElementById(tables[i]).style.display = "none";
+				}
+			} else {
+				for (let i = 0; i < tables.length; i++) {
+					if (tableSelect.value == tables[i]) {
+						var table = document.getElementById(tables[i]).style.display = "";
+					} else {
+						var table = document.getElementById(tables[i]).style.display = "none";
+					}
 				}
 			}
-		}
 		});
 	}
-	
+
 	function loadTables(dictionary) {
 		while (tables.length > 0) {
 			removeTable(tables[0]);
 		}
-		
+
 		for (var key in dictionary) {
 			if (dictionary.hasOwnProperty(key)) {
 				var tableId = "table" + key;
-				
+
 				createTable(tableId);
-				
-				for(let i = 0; i < dictionary[key].length; i++) {
+
+				for (let i = 0; i < dictionary[key].length; i++) {
 					addRow(tableId, dictionary[key][i]);
 				}
 			}
 		}
 		updateView();
 	}
-	
-    function createTable(tableId) {
-        const table = document.createElement('table');
-        table.id = tableId;
-		
+
+	function createTable(tableId) {
+		const table = document.createElement('table');
+		table.id = tableId;
+
 		var newCaption = document.createElement('caption');
-  
+
 		newCaption.textContent = "Ден " + (tables.length + 1) + " - " + tableId.substring(5);
 
-        // Create the header row
-        const headerRow = document.createElement("tr");
-		
-        const id = document.createElement("th");
-        id.textContent = 'id';
-		const time = document.createElement("th");
-        time.textContent = 'Час';
-		const fn = document.createElement("th");
-        fn.textContent = 'Факлутетен номер';
-		const group = document.createElement("th");
-        group.textContent = 'Група';
-		const name = document.createElement("th");
-        name.textContent = 'Име Фамилия';
-		const themeNumber = document.createElement("th");
-        themeNumber.textContent = '№ Тема';
-		const theme = document.createElement("th");
-        theme.textContent = 'Тема';
-		const interest = document.createElement("th");
-        interest.textContent = 'Интерес';
+		// Create the header row
+		const headerRow = document.createElement("tr");
 
-        headerRow.appendChild(id);
+		const id = document.createElement("th");
+		id.textContent = 'id';
+		const time = document.createElement("th");
+		time.textContent = 'Час';
+		const fn = document.createElement("th");
+		fn.textContent = 'Факлутетен номер';
+		const group = document.createElement("th");
+		group.textContent = 'Група';
+		const name = document.createElement("th");
+		name.textContent = 'Име Фамилия';
+		const themeNumber = document.createElement("th");
+		themeNumber.textContent = '№ Тема';
+		const theme = document.createElement("th");
+		theme.textContent = 'Тема';
+		const interest = document.createElement("th");
+		interest.textContent = 'Интерес';
+
+		headerRow.appendChild(id);
 		headerRow.appendChild(time);
 		headerRow.appendChild(fn);
 		headerRow.appendChild(group);
@@ -180,58 +180,58 @@ document.addEventListener('DOMContentLoaded', function() {
 		headerRow.appendChild(themeNumber);
 		headerRow.appendChild(theme);
 		headerRow.appendChild(interest);
-		
+
 		table.appendChild(newCaption);
 		table.appendChild(headerRow);
-	
-        document.getElementById("tables").appendChild(table);
+
+		document.getElementById("tables").appendChild(table);
 		tables.push(tableId);
-		
+
 		var selectElement = document.getElementById('tableSelect');
 		var optionElement = document.createElement('option');
-        optionElement.value = tableId; // Adjust the value as needed
-        optionElement.textContent = "Ден " + (tables.length) + " - " + tableId.substring(5);
-        selectElement.appendChild(optionElement);
-	 }
-	
+		optionElement.value = tableId; // Adjust the value as needed
+		optionElement.textContent = "Ден " + (tables.length) + " - " + tableId.substring(5);
+		selectElement.appendChild(optionElement);
+	}
+
 	function addRow(tableID, row) {
 		const table = document.getElementById(tableID);
-		
+
 		if (!table) {
 			console.error(`Table with ID ${tableID} not found.`);
 			return;
 		}
 
 		const newRow = document.createElement("tr");
-		
+
 		const id = document.createElement("td");
 		id.textContent = row[0];
-		
+
 		const time = document.createElement("td");
 		time.textContent = row[1];
-		
+
 		const fn = document.createElement("td");
 		fn.textContent = row[2];
-		
+
 		const group = document.createElement("td");
 		group.textContent = row[3];
-		
+
 		const name = document.createElement("td");
 		name.textContent = row[4];
-		
+
 		const themeNumber = document.createElement("td");
 		themeNumber.textContent = row[5];
-		
+
 		const theme = document.createElement("td");
 		theme.textContent = row[6];
-		
+
 		const interest = document.createElement("td");
-		
+
 		if (fn.textContent != '') {
-			
+
 			const dropdown = document.createElement("select");
 			dropdown.classList.add("tableDropList");
-		
+
 			const nothing = document.createElement("option");
 			nothing.value = 0;
 			nothing.text = '';
@@ -253,37 +253,37 @@ document.addEventListener('DOMContentLoaded', function() {
 			might.value = 4;
 			might.text = 'Може да е интересно';
 			dropdown.appendChild(might);
-			
-			dropdown.addEventListener('change', function(event) {
+
+			dropdown.addEventListener('change', function (event) {
 				var selectedValue = dropdown.value;
 				var row = dropdown.closest('tr');
 				var cells = row.getElementsByTagName('td');
-				
+
 				getPresentationIdByFN(cells[2].textContent)
-				.then(presentationId => {
-				
-					getIdByUsername(sessionStorage.getItem('username'))
-					.then(currentUserId => {
-				
-						addInterestToDB(currentUserId, presentationId, selectedValue);
+					.then(presentationId => {
+
+						getIdByUsername(sessionStorage.getItem('username'))
+							.then(currentUserId => {
+
+								addInterestToDB(currentUserId, presentationId, selectedValue);
+							})
+							.catch(error => {
+								console.error(error);
+							});
+
+						// You might consider checking for !='' here
+
 					})
 					.catch(error => {
 						console.error(error);
 					});
-				
-					// You might consider checking for !='' here
-				
-				})
-				.catch(error => {
-					console.error(error);
-				});//ne znam kak da vzema fn ot tablicata
-				
-				
+
+
 			});
-		
+
 			interest.appendChild(dropdown);
 		}
-		
+
 		// Append cells to the new row
 		newRow.appendChild(id);
 		newRow.appendChild(time);
@@ -293,18 +293,18 @@ document.addEventListener('DOMContentLoaded', function() {
 		newRow.appendChild(themeNumber);
 		newRow.appendChild(theme);
 		newRow.appendChild(interest);
-		
+
 		// Append the new row to the table
 		table.appendChild(newRow);
-	} 
-	
+	}
+
 	function removeTable(tableId) {
 		const tableToRemove = document.getElementById(tableId);
-		
+
 		if (tableToRemove) {
 			const parentElement = tableToRemove.parentNode;
 			parentElement.removeChild(tableToRemove);
-		
+
 			const index = tables.indexOf(tableId);
 			if (index !== -1) {
 				var selectElement = document.getElementById('tableSelect');
@@ -315,55 +315,29 @@ document.addEventListener('DOMContentLoaded', function() {
 						break;
 					}
 				}
-				
+
 				tables.splice(index, 1);
 			}
 		} else {
 			console.warn(`Table with ID ${tableId} not found.`);
 		}
 	}
-	
-	//TODO TO BE DELETED   v v v																	!!!!!!!
-	
-	function getDropdownValues(tableID) {
-	// Find the table element by ID
-	const table = document.getElementById(tableID);
-	
-	if (!table) {
-		console.error(`Table with ID ${tableID} not found.`);
-		return;
-	}
-	
-	// Iterate through rows in the table
-	for (let i = 1; i < table.rows.length; i++) {
-			const row = table.rows[i];
-			// Get the second cell (index 1) which contains the dropdown
-			const dropdownCell = row.cells[7];
-		
-			// Check if the cell contains a dropdown with the specified class
-			const dropdown = dropdownCell.querySelector('.tableDropList');
-			// Retrieve the selected value of the dropdown
-			const selectedValue = dropdown.value;
-			
-			//DO SOMETHING SWITCH ON VALUE
-	    }
-	}
-	
+
 	function clearDropdownValues() {
-		for(let i = 0; i < tables.length; i++) {
+		for (let i = 0; i < tables.length; i++) {
 			const table = document.getElementById(tables[i]);
-		
+
 			if (!table) {
 				console.error(`Table with ID ${tableID} not found.`);
 				return;
 			}
-			
+
 			// Iterate through rows in the table
 			for (let i = 1; i < table.rows.length; i++) {
 				const row = table.rows[i];
 				// Get the second cell (index 1) which contains the dropdown
 				const dropdownCell = row.cells[7];
-			
+
 				// Check if the cell contains a dropdown with the specified class
 				const dropdown = dropdownCell.querySelector('.tableDropList');
 				// Retrieve the selected value of the dropdown
@@ -373,8 +347,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 		}
 	}
-	
-	// Можеш да преместиш където искаш тези функции които съм дефинирал 
+
 	async function getPresentationIdByFN(fn) {
 		try {
 			const response = await fetch('http://localhost/demo/api.php', {
@@ -392,7 +365,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			const data = await response.json(); //json data has an error or id field
 			if (data.error == null) {
 				// getId successful
-				//console.log(data.id);
 				return data.id;
 			} else {
 				// getId failed
@@ -431,7 +403,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			console.error('Fetch error:', error.message);
 		}
 	}
-	
+
 	async function addInterestToDB(currentUserId, presentationId, interestString) {
 		try {
 			const response = await fetch('http://localhost/demo/api.php', {
@@ -458,7 +430,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			console.error('Fetch error:', error.message);
 		}
 	}
-	
+
 	async function getUserInterests(userId) {
 		try {
 			const response = await fetch('http://localhost/demo/api.php', {
@@ -468,47 +440,41 @@ document.addEventListener('DOMContentLoaded', function() {
 				},
 				body: `action=${encodeURIComponent('get_interests')}&userId=${encodeURIComponent(userId)}`,
 			});
-	
+
 			if (!response.ok) {
 				throw new Error(`HTTP error! Status: ${response.status}`);
 			}
-	
-			const data = await response.json(); 
+
+			const data = await response.json();
 			if (data.error == null) {
 				// getting data from JSON response
 				let parsedData = JSON.parse(data);
 				return parsedData;
-				// loadTables(parsedData);
-			} else {
-				//clearDropdownValues();
 			}
-	
+
 		} catch (error) {
 			console.error('Fetch error:', error.message);
 		}
 	}
-	
-	
+
+
 	async function exportToPdf() {
 		const element = document.getElementById('tables');
 		toggleLastColumnVisibility(true);
-		
-		//FORMAT TABLES!!!!!!!!!!!!!!!!!!
-		
+
 		const captionElements = document.getElementsByTagName('caption');
-		for (let i = 0; i < captionElements.length ; i++) {
+		for (let i = 0; i < captionElements.length; i++) {
 			captionElements[i].style.color = "#000";
 		}
-		
+
 		// Use html2pdf library to export the div content to PDF
 		await html2pdf(element);
-		
-		//DEFORMAT TABLES!!!!!!!!!!!!!!!!
+
 		toggleLastColumnVisibility(false);
-		for(let i = 0; i < captionElements.length ; i++) {
+		for (let i = 0; i < captionElements.length; i++) {
 			captionElements[i].style.color = "#eee";
 		}
-		
+
 		closeExportFrom();
 	}
 
@@ -517,12 +483,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		var tables = dataDiv.querySelectorAll("table");
 		var finalCsv = "";
 		counter = 0;
-		console.log("vliza");
 		for (var i = 0; i < tables.length; i++) {
 			var table = tables[i];
 			if (table.style.display !== 'none') {
 				var caption = table.caption ? table.caption.innerText : '';
-				// console.log(caption);
 
 				var csv = Papa.unparse(getTableData(table));
 				if (counter == 0) {
@@ -542,7 +506,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);
-		
+
 		closeExportFrom();
 	}
 	function getTableData(table) {
