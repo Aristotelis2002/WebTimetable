@@ -2,14 +2,15 @@ document.addEventListener('DOMContentLoaded', function() {
 	const logOutButton = document.getElementById("logOut-button");
 	
 	function updateView() {
-		getAdminStatus(sessionStorage.getItem('username')).then(adminStat => {
-			console.log(adminStat);
-			console.log(sessionStorage.getItem('adminStatus'));
-			if (adminStat != sessionStorage.getItem('adminStatus')) {
-				sessionStorage.setItem('adminStatus', adminStat);
-			}
-		});
-		
+		if (sessionStorage.getItem('username') != '') {
+			getAdminStatus(sessionStorage.getItem('username')).then(adminStat => {
+				console.log(adminStat);
+				console.log(sessionStorage.getItem('adminStatus'));
+				if (adminStat != sessionStorage.getItem('adminStatus')) {
+					sessionStorage.setItem('adminStatus', adminStat);
+				}
+			});
+		}
 		
 		if (sessionStorage.getItem('username') != '') {
 			clearDropdownValues();
@@ -55,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	function logOut() {
 		sessionStorage.setItem('username', '');
 		sessionStorage.setItem('adminStatus', false);
+		closeExportFrom();
 		document.getElementById("btn-clear-filters").click();
 		updateView();
 	}
@@ -81,8 +83,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		var password = document.getElementById("password").value;
 		sha256Hash(password).then(hashedPass => {
 			loginUser(username, hashedPass);
-
-		
 			
 		}).catch(error => {
 			console.error('Error with sha256:', error);

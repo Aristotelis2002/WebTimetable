@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (sessionStorage.getItem('adminStatus') == 'true') {
 			fileInput.click();
 		} else {
-			document.getElementById('export').style.display = "block";
+			openExportFrom();
 		}
 	}
 	
@@ -26,7 +26,16 @@ document.addEventListener('DOMContentLoaded', function() {
 		exportPdf.addEventListener('click', exportToPdf);
 	}
 	
+	function openExportFrom() {
+		document.getElementById("export").style.display = "block";
+	}
+	
+	function closeExportFrom() {
+		document.getElementById("export").style.display = "none";
+	}
+	
 	function openFilterFrom() {
+		closeExportFrom();
 		document.getElementById("filters").style.display = "block";
 	}
 	
@@ -95,6 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	if (tableSelect) {
 		tableSelect.addEventListener('click',  function() {
 			closeFilterFrom();
+			closeExportFrom();
 		});
 		
 		tableSelect.addEventListener('change',  function() {
@@ -498,7 +508,8 @@ document.addEventListener('DOMContentLoaded', function() {
 		for(let i = 0; i < captionElements.length ; i++) {
 			captionElements[i].style.color = "#eee";
 		}
-		document.getElementById('export').style.display = "none";
+		
+		closeExportFrom();
 	}
 
 	function exportToCSV() {
@@ -532,7 +543,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		link.click();
 		document.body.removeChild(link);
 		
-		document.getElementById('export').style.display = "none";
+		closeExportFrom();
 	}
 	function getTableData(table) {
 		var data = [];
@@ -560,6 +571,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	window.clearDropdownValues = clearDropdownValues;
 	window.loadTables = loadTables;
 	window.closeFilterFrom = closeFilterFrom;
+	window.closeExportFrom = closeExportFrom;
 	window.getUserInterests = getUserInterests;
 	window.getIdByUsername = getIdByUsername;
 });
